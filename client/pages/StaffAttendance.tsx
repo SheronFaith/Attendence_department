@@ -29,11 +29,6 @@ export default function StaffAttendance() {
   const navigate = useNavigate();
   const [course, setCourse] = useState<Course | null>(null);
   const [students, setStudents] = useState<StudentAttendance[]>([]);
-
-  // Debug: Log students state when it changes
-  useEffect(() => {
-    console.log('Students state updated:', students.map(s => ({ name: s.studentName, status: s.status })));
-  }, [students]);
   const [date, setDate] = useState(getCurrentDate());
   const [periodFrom, setPeriodFrom] = useState(1);
   const [periodTo, setPeriodTo] = useState(1);

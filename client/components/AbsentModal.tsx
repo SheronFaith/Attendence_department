@@ -58,15 +58,6 @@ export function AbsentModal({ open, onClose, onSelect, studentName }: AbsentModa
           >
             Leave
           </Button>
-
-          <Button
-            onClick={onClose}
-            variant="ghost"
-            size="sm"
-            className="mt-2"
-          >
-            Cancel
-          </Button>
         </div>
       </div>
     </div>

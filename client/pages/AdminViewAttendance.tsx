@@ -274,24 +274,70 @@ export default function AdminViewAttendance() {
                       <tr>
                         <th className="px-6 py-3 text-left">
                           <button
-                            onClick={handleSortToggle}
-                            className="flex items-center gap-1 text-xs font-medium text-gray-500 uppercase tracking-wider hover:text-gray-700"
+                            onClick={() => handleSort('rollNo')}
+                            className={`flex items-center gap-1 text-xs font-medium uppercase tracking-wider hover:text-gray-700 ${
+                              sortField === 'rollNo' ? 'text-gray-900' : 'text-gray-500'
+                            }`}
                           >
                             Roll No
                             <ArrowUpDown className="h-3 w-3" />
+                            {sortField === 'rollNo' && (
+                              <span className="text-xs ml-1">
+                                {sortOrder === 'asc' ? '↑' : '↓'}
+                              </span>
+                            )}
                           </button>
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Student Name
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Section
+                        <th className="px-6 py-3 text-left">
+                          <button
+                            onClick={() => handleSort('section')}
+                            className={`flex items-center gap-1 text-xs font-medium uppercase tracking-wider hover:text-gray-700 ${
+                              sortField === 'section' ? 'text-gray-900' : 'text-gray-500'
+                            }`}
+                          >
+                            Section
+                            <ArrowUpDown className="h-3 w-3" />
+                            {sortField === 'section' && (
+                              <span className="text-xs ml-1">
+                                {sortOrder === 'asc' ? '↑' : '↓'}
+                              </span>
+                            )}
+                          </button>
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Status
+                        <th className="px-6 py-3 text-left">
+                          <button
+                            onClick={() => handleSort('status')}
+                            className={`flex items-center gap-1 text-xs font-medium uppercase tracking-wider hover:text-gray-700 ${
+                              sortField === 'status' ? 'text-gray-900' : 'text-gray-500'
+                            }`}
+                          >
+                            Status
+                            <ArrowUpDown className="h-3 w-3" />
+                            {sortField === 'status' && (
+                              <span className="text-xs ml-1">
+                                {sortOrder === 'asc' ? '↑' : '↓'}
+                              </span>
+                            )}
+                          </button>
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Course
+                        <th className="px-6 py-3 text-left">
+                          <button
+                            onClick={() => handleSort('course')}
+                            className={`flex items-center gap-1 text-xs font-medium uppercase tracking-wider hover:text-gray-700 ${
+                              sortField === 'course' ? 'text-gray-900' : 'text-gray-500'
+                            }`}
+                          >
+                            Course
+                            <ArrowUpDown className="h-3 w-3" />
+                            {sortField === 'course' && (
+                              <span className="text-xs ml-1">
+                                {sortOrder === 'asc' ? '↑' : '↓'}
+                              </span>
+                            )}
+                          </button>
                         </th>
                       </tr>
                     </thead>

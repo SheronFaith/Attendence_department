@@ -51,10 +51,10 @@ export default function AdminReports() {
   const handleGenerateReport = () => {
     // Filter data based on selected section
     let filteredData = mockReportData;
-    if (selectedSection) {
+    if (selectedSection && selectedSection !== 'all') {
       filteredData = mockReportData.filter(item => item.section === selectedSection);
     }
-    
+
     setReportData(filteredData);
     setShowReport(true);
   };

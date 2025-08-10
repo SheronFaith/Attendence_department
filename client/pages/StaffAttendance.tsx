@@ -358,6 +358,7 @@ export default function StaffAttendance() {
                               aria-label={`Toggle attendance for ${student.studentName}. Currently ${student.status}`}
                             >
                               <Switch
+                                key={`${student.id}-${student.status}-${forceUpdate}`}
                                 checked={student.status === 'Present'}
                                 aria-hidden="true"
                                 onCheckedChange={() => {}} // Disable Switch's own onChange
@@ -369,6 +370,8 @@ export default function StaffAttendance() {
                               }`}>
                                 {student.status === 'Present' ? 'Present' :
                                  student.status === 'OD' ? 'OD' : 'Leave'}
+                                {/* Debug: show actual status */}
+                                <span className="text-xs text-gray-400 ml-1">({student.status})</span>
                               </span>
                             </div>
                           </td>

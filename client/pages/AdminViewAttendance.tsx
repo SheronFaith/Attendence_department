@@ -102,14 +102,34 @@ export default function AdminViewAttendance() {
       );
     }
 
-    // Sort by roll number
+    // Sort by selected field
     filtered.sort((a, b) => {
-      const comparison = a.studentRollNo.localeCompare(b.studentRollNo);
+      let comparison = 0;
+
+      switch (sortField) {
+        case 'rollNo':
+          comparison = a.studentRollNo.localeCompare(b.studentRollNo);
+          break;
+        case 'section':
+          comparison = a.section.localeCompare(b.section);
+          break;
+        case 'status':
+          // Custom order: Present, OD, Leave
+          const statusOrder = { 'Present': 0, 'OD': 1, 'Leave': 2 };
+          comparison = statusOrder[a.status] - statusOrder[b.status];
+          break;
+        case 'course':
+          comparison = a.courseName.localeCompare(b.courseName);
+          break;
+        default:
+          comparison = a.studentRollNo.localeCompare(b.studentRollNo);
+      }
+
       return sortOrder === 'asc' ? comparison : -comparison;
     });
 
     return filtered;
-  }, [attendanceEntries, searchQuery, sortOrder]);
+  }, [attendanceEntries, searchQuery, sortField, sortOrder]);
 
   // Pagination
   const totalPages = Math.ceil(filteredAndSortedEntries.length / itemsPerPage);

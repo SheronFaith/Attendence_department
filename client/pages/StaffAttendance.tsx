@@ -88,9 +88,7 @@ export default function StaffAttendance() {
   };
 
   const handleAbsentSelect = (type: 'OD' | 'Leave') => {
-    console.log('handleAbsentSelect called with:', type, 'for student:', selectedStudent?.studentName);
     if (selectedStudent) {
-      console.log('Updating student status to:', type);
       setStudents(prev =>
         prev.map(s =>
           s.id === selectedStudent.id
@@ -98,8 +96,6 @@ export default function StaffAttendance() {
             : s
         )
       );
-    } else {
-      console.log('No selected student found');
     }
     setIsModalOpen(false);
     setSelectedStudent(null);

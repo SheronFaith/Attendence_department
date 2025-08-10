@@ -402,9 +402,11 @@ export default function StaffAttendance() {
       </main>
 
       {/* Absent Modal */}
+      {console.log('Rendering modal, isModalOpen:', isModalOpen, 'selectedStudent:', selectedStudent?.studentName)}
       <AbsentModal
         open={isModalOpen}
         onClose={() => {
+          console.log('Modal close triggered');
           setIsModalOpen(false);
           setSelectedStudent(null);
           setTimeout(() => {

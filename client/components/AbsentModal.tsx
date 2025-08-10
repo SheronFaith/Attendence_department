@@ -55,23 +55,20 @@ export function AbsentModal({ open, onClose, onSelect, studentName }: AbsentModa
         </p>
 
         <div className="flex flex-col gap-3">
-          <Button
+          <button
             ref={firstButtonRef}
             onClick={() => handleSelect('OD')}
-            size="lg"
-            className="h-12 text-base"
+            className="h-12 text-base bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
           >
             OD (Official Duty)
-          </Button>
+          </button>
 
-          <Button
+          <button
             onClick={() => handleSelect('Leave')}
-            variant="outline"
-            size="lg"
-            className="h-12 text-base"
+            className="h-12 text-base border border-gray-300 bg-white text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
           >
             Leave
-          </Button>
+          </button>
         </div>
       </div>
     </div>

@@ -85,13 +85,15 @@ export default function StaffAttendance() {
 
   const handleAbsentSelect = (type: 'OD' | 'Leave') => {
     if (selectedStudent) {
-      setStudents(prev =>
-        prev.map(s =>
-          s.id === selectedStudent.id
-            ? { ...s, status: type }
-            : s
-        )
-      );
+      flushSync(() => {
+        setStudents(prev =>
+          prev.map(s =>
+            s.id === selectedStudent.id
+              ? { ...s, status: type }
+              : s
+          )
+        );
+      });
     }
     setIsModalOpen(false);
     setSelectedStudent(null);

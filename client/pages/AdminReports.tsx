@@ -178,7 +178,7 @@ export default function AdminReports() {
                       <SelectValue placeholder="All Sections" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Sections</SelectItem>
+                      <SelectItem value="all">All Sections</SelectItem>
                       <SelectItem value="A">Section A</SelectItem>
                       <SelectItem value="B">Section B</SelectItem>
                       <SelectItem value="C">Section C</SelectItem>

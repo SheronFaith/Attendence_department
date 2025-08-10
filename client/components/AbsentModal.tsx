@@ -34,13 +34,7 @@ export function AbsentModal({ open, onClose, onSelect, studentName }: AbsentModa
   }, [open, onClose]);
 
   const handleSelect = (type: 'OD' | 'Leave') => {
-    console.log('Modal button clicked:', type);
-    try {
-      onSelect(type);
-      onClose();
-    } catch (error) {
-      console.error('Error in handleSelect:', error);
-    }
+    onSelect(type);
   };
 
   if (!open) return null;

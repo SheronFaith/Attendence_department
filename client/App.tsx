@@ -1,6 +1,13 @@
 import "./global.css";
 
 import { Toaster } from "@/components/ui/toaster";
+
+// Extend window type for HMR root storage
+declare global {
+  interface Window {
+    __reactRoot?: ReturnType<typeof createRoot>;
+  }
+}
 import { createRoot } from "react-dom/client";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";

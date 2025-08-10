@@ -19,6 +19,7 @@ interface AttendanceEntry {
 }
 
 type SortOrder = 'asc' | 'desc';
+type SortField = 'rollNo' | 'section' | 'status' | 'course';
 
 export default function AdminViewAttendance() {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ export default function AdminViewAttendance() {
   const [selectedPeriod, setSelectedPeriod] = useState('1');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortField, setSortField] = useState<SortField>('rollNo');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
   const [attendanceEntries, setAttendanceEntries] = useState<AttendanceEntry[]>([]);
 

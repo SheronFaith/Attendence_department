@@ -97,6 +97,9 @@ export default function StaffAttendance() {
         console.log('New students state:', newStudents.map(s => ({ name: s.studentName, status: s.status })));
         return newStudents;
       });
+
+      // Force a re-render
+      setForceUpdate(prev => prev + 1);
       console.log('Student status updated');
     }
     setIsModalOpen(false);

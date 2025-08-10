@@ -65,16 +65,16 @@ export default function AdminViewAttendance() {
     // Add mock data if no records found to show the UI
     if (entries.length === 0) {
       const mockEntries: AttendanceEntry[] = [
-        { studentId: 101, studentRollNo: 'CSE101', studentName: 'John Doe', status: 'Present', section: 'A', courseName: 'Computer Science' },
-        { studentId: 102, studentRollNo: 'CSE102', studentName: 'Jane Smith', status: 'OD', section: 'A', courseName: 'Computer Science' },
-        { studentId: 103, studentRollNo: 'CSE103', studentName: 'Bob Johnson', status: 'Leave', section: 'B', courseName: 'Mathematics' },
-        { studentId: 104, studentRollNo: 'CSE104', studentName: 'Alice Brown', status: 'Present', section: 'B', courseName: 'Mathematics' },
-        { studentId: 105, studentRollNo: 'CSE105', studentName: 'Charlie Wilson', status: 'OD', section: 'A', courseName: 'Computer Science' },
-        { studentId: 106, studentRollNo: 'CSE106', studentName: 'Diana Davis', status: 'Present', section: 'C', courseName: 'Physics' },
-        { studentId: 107, studentRollNo: 'CSE107', studentName: 'Eve Miller', status: 'Leave', section: 'C', courseName: 'Physics' },
-        { studentId: 108, studentRollNo: 'CSE108', studentName: 'Frank Garcia', status: 'Present', section: 'B', courseName: 'Mathematics' },
-        { studentId: 109, studentRollNo: 'CSE109', studentName: 'Grace Martinez', status: 'OD', section: 'A', courseName: 'Computer Science' },
-        { studentId: 110, studentRollNo: 'CSE110', studentName: 'Henry Lee', status: 'Present', section: 'C', courseName: 'Physics' },
+        { studentId: 101, studentRollNo: 'CSE101', studentName: 'John Doe', status: 'Present', section: '1', courseName: 'Computer Science' },
+        { studentId: 102, studentRollNo: 'CSE102', studentName: 'Jane Smith', status: 'OD', section: '1', courseName: 'Computer Science' },
+        { studentId: 103, studentRollNo: 'CSE103', studentName: 'Bob Johnson', status: 'Leave', section: '2', courseName: 'Mathematics' },
+        { studentId: 104, studentRollNo: 'CSE104', studentName: 'Alice Brown', status: 'Present', section: '2', courseName: 'Mathematics' },
+        { studentId: 105, studentRollNo: 'CSE105', studentName: 'Charlie Wilson', status: 'OD', section: '1', courseName: 'Computer Science' },
+        { studentId: 106, studentRollNo: 'CSE106', studentName: 'Diana Davis', status: 'Present', section: '3', courseName: 'Physics' },
+        { studentId: 107, studentRollNo: 'CSE107', studentName: 'Eve Miller', status: 'Leave', section: '3', courseName: 'Physics' },
+        { studentId: 108, studentRollNo: 'CSE108', studentName: 'Frank Garcia', status: 'Present', section: '2', courseName: 'Mathematics' },
+        { studentId: 109, studentRollNo: 'CSE109', studentName: 'Grace Martinez', status: 'OD', section: '1', courseName: 'Computer Science' },
+        { studentId: 110, studentRollNo: 'CSE110', studentName: 'Henry Lee', status: 'Present', section: '3', courseName: 'Physics' },
       ];
       setAttendanceEntries(mockEntries);
     } else {

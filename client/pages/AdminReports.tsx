@@ -26,7 +26,7 @@ export default function AdminReports() {
   const navigate = useNavigate();
   const [startDate, setStartDate] = useState(getCurrentDate());
   const [endDate, setEndDate] = useState(getCurrentDate());
-  const [selectedSection, setSelectedSection] = useState('');
+  const [selectedSection, setSelectedSection] = useState('all');
   const [reportType, setReportType] = useState('');
   const [showReport, setShowReport] = useState(false);
   const [reportData, setReportData] = useState<ReportData[]>([]);

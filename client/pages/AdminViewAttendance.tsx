@@ -137,8 +137,15 @@ export default function AdminViewAttendance() {
   const endIndex = startIndex + itemsPerPage;
   const currentEntries = filteredAndSortedEntries.slice(startIndex, endIndex);
 
-  const handleSortToggle = () => {
-    setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
+  const handleSort = (field: SortField) => {
+    if (sortField === field) {
+      // Same field, toggle order
+      setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
+    } else {
+      // Different field, set new field and default to ascending
+      setSortField(field);
+      setSortOrder('asc');
+    }
   };
 
   const handlePageChange = (page: number) => {

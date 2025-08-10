@@ -84,7 +84,6 @@ export default function StaffAttendance() {
   };
 
   const handleAbsentSelect = (type: 'OD' | 'Leave') => {
-    console.log('Modal selection:', type, 'for student:', selectedStudent?.studentName);
     if (selectedStudent) {
       setStudents(prev =>
         prev.map(s =>

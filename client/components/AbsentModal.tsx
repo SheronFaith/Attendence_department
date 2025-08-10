@@ -20,7 +20,6 @@ export function AbsentModal({ open, onClose, onSelect, studentName }: AbsentModa
   }, [open]);
 
   const handleSelect = (type: 'OD' | 'Leave') => {
-    console.log('AbsentModal handleSelect clicked:', type);
     onSelect(type);
     onClose();
   };

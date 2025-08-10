@@ -121,12 +121,11 @@ export default function AdminDashboard() {
                 </div>
               </CardHeader>
               <CardContent>
-                <Button className="w-full" disabled>
-                  Coming Soon
-                </Button>
-                <p className="text-xs text-gray-500 mt-2">
-                  This feature is being developed. Continue prompting to build it!
-                </p>
+                <Link to="/admin/reports">
+                  <Button className="w-full">
+                    Generate Reports
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           </div>

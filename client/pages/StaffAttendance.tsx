@@ -67,9 +67,7 @@ export default function StaffAttendance() {
   }, [courseId, navigate]);
 
   const handleToggle = (student: StudentAttendance, buttonRef: HTMLButtonElement) => {
-    console.log('Toggle clicked for student:', student.studentName, 'Status:', student.status);
     if (student.status === 'Present') {
-      console.log('Setting modal open for student:', student.studentName);
       setSelectedStudent(student);
       setIsModalOpen(true);
       lastToggledRef.current = buttonRef;

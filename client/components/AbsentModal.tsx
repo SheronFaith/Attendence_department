@@ -34,48 +34,35 @@ export function AbsentModal({ open, onClose, onSelect, studentName }: AbsentModa
     }
   };
 
+  if (!open) return null;
+
   return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent
-        className="sm:max-w-md"
-        onKeyDown={handleKeyDown}
-        aria-describedby="absent-modal-description"
-        style={{ zIndex: 9999 }}
-      >
-        <DialogHeader>
-          <DialogTitle>Mark as Absent</DialogTitle>
-          <DialogDescription id="absent-modal-description">
-            {studentName ? `Mark ${studentName} as:` : 'Select absence type:'}
-          </DialogDescription>
-        </DialogHeader>
-        
-        <div className="flex flex-col gap-3 pt-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
+        <h2 className="text-lg font-semibold mb-2">Mark as Absent</h2>
+        <p className="text-gray-600 mb-4">
+          {studentName ? `Mark ${studentName} as:` : 'Select absence type:'}
+        </p>
+
+        <div className="flex flex-col gap-3">
           <Button
             ref={firstButtonRef}
             onClick={() => handleSelect('OD')}
             size="lg"
             className="h-12 text-base"
-            aria-describedby="od-description"
           >
             OD (Official Duty)
           </Button>
-          <span id="od-description" className="sr-only">
-            Mark student as on official duty
-          </span>
-          
+
           <Button
             onClick={() => handleSelect('Leave')}
             variant="outline"
             size="lg"
             className="h-12 text-base"
-            aria-describedby="leave-description"
           >
             Leave
           </Button>
-          <span id="leave-description" className="sr-only">
-            Mark student as on leave
-          </span>
-          
+
           <Button
             onClick={onClose}
             variant="ghost"
@@ -85,7 +72,7 @@ export function AbsentModal({ open, onClose, onSelect, studentName }: AbsentModa
             Cancel
           </Button>
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 }

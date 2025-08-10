@@ -88,10 +88,10 @@ export const mockCourses: Course[] = [
 ];
 
 export const mockStudents: Student[] = [
-  { id: 201, studentName: "Alice Sharma", studentRollNo: "CSE201", courseBatch: "BATCH-A", studentSection: "B" },
-  { id: 202, studentName: "Ravi Kumar", studentRollNo: "CSE202", courseBatch: "BATCH-A", studentSection: "B" },
-  { id: 301, studentName: "Priya Nair", studentRollNo: "CSE101", courseBatch: "COMMON-1", studentSection: "A" },
-  { id: 302, studentName: "Rahul Das", studentRollNo: "CSE102", courseBatch: "COMMON-1", studentSection: "A" }
+  { id: 201, studentName: "Alice Sharma", studentRollNo: "CSE201", courseBatch: "BATCH-A", studentSection: "2" },
+  { id: 202, studentName: "Ravi Kumar", studentRollNo: "CSE202", courseBatch: "BATCH-A", studentSection: "2" },
+  { id: 301, studentName: "Priya Nair", studentRollNo: "CSE101", courseBatch: "COMMON-1", studentSection: "1" },
+  { id: 302, studentName: "Rahul Das", studentRollNo: "CSE102", courseBatch: "COMMON-1", studentSection: "1" }
 ];
 
 // Utility functions for localStorage operations

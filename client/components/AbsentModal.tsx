@@ -12,7 +12,10 @@ interface AbsentModalProps {
 export function AbsentModal({ open, onClose, onSelect, studentName }: AbsentModalProps) {
   const firstButtonRef = useRef<HTMLButtonElement>(null);
 
+  console.log('AbsentModal render - open:', open, 'studentName:', studentName);
+
   useEffect(() => {
+    console.log('AbsentModal useEffect - open changed to:', open);
     if (open && firstButtonRef.current) {
       // Focus the first button when modal opens
       setTimeout(() => firstButtonRef.current?.focus(), 100);

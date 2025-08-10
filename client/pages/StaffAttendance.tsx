@@ -402,7 +402,6 @@ export default function StaffAttendance() {
       <AbsentModal
         open={isModalOpen}
         onClose={() => {
-          console.log('Modal close triggered');
           setIsModalOpen(false);
           setSelectedStudent(null);
           setTimeout(() => {

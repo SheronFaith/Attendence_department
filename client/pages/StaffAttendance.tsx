@@ -84,6 +84,7 @@ export default function StaffAttendance() {
   };
 
   const handleAbsentSelect = (type: 'OD' | 'Leave') => {
+    console.log('handleAbsentSelect called with:', type, 'selectedStudent:', selectedStudent?.studentName);
     if (selectedStudent) {
       flushSync(() => {
         setStudents(prev =>
@@ -94,6 +95,7 @@ export default function StaffAttendance() {
           )
         );
       });
+      console.log('Student status updated');
     }
     setIsModalOpen(false);
     setSelectedStudent(null);

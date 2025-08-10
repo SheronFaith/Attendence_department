@@ -398,9 +398,6 @@ export default function StaffAttendance() {
         onClose={() => {
           setIsModalOpen(false);
           setSelectedStudent(null);
-          setTimeout(() => {
-            lastToggledRef.current?.focus();
-          }, 100);
         }}
         onSelect={handleAbsentSelect}
         studentName={selectedStudent?.studentName}

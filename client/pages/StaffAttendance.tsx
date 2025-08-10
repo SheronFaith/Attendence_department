@@ -327,16 +327,6 @@ export default function StaffAttendance() {
                             {student.studentName}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm">
-                            <Badge 
-                              variant={
-                                student.status === 'Present' ? 'default' :
-                                student.status === 'OD' ? 'secondary' : 'destructive'
-                              }
-                            >
-                              {student.status}
-                            </Badge>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm">
                             <div
                               role="button"
                               tabIndex={0}
@@ -360,8 +350,12 @@ export default function StaffAttendance() {
                                 onCheckedChange={() => {}} // Disable Switch's own onChange
                                 className="pointer-events-none" // Make Switch non-interactive
                               />
-                              <span className="text-xs text-gray-500">
-                                {student.status === 'Present' ? 'Present' : 'Absent'}
+                              <span className={`text-xs font-medium ${
+                                student.status === 'Present' ? 'text-green-600' :
+                                student.status === 'OD' ? 'text-blue-600' : 'text-red-600'
+                              }`}>
+                                {student.status === 'Present' ? 'Present' :
+                                 student.status === 'OD' ? 'OD' : 'Leave'}
                               </span>
                             </div>
                           </td>

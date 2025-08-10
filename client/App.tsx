@@ -13,6 +13,8 @@ import Login from "./pages/Login";
 import StaffDashboard from "./pages/StaffDashboard";
 import StaffAttendance from "./pages/StaffAttendance";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminViewAttendance from "./pages/AdminViewAttendance";
+import AdminReports from "./pages/AdminReports";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

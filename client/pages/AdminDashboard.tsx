@@ -72,12 +72,11 @@ export default function AdminDashboard() {
                 </div>
               </CardHeader>
               <CardContent>
-                <Button className="w-full" disabled>
-                  Coming Soon
-                </Button>
-                <p className="text-xs text-gray-500 mt-2">
-                  This feature is being developed. Continue prompting to build it!
-                </p>
+                <Link to="/admin/view-attendance">
+                  <Button className="w-full">
+                    View Attendance Records
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
 

@@ -343,7 +343,11 @@ export default function StaffAttendance() {
                             <div
                               role="button"
                               tabIndex={0}
-                              onClick={(e) => handleToggle(student, e.currentTarget as HTMLButtonElement)}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                handleToggle(student, e.currentTarget as HTMLButtonElement);
+                              }}
                               onKeyDown={(e) => {
                                 if (e.key === 'Enter' || e.key === ' ') {
                                   e.preventDefault();
@@ -356,6 +360,8 @@ export default function StaffAttendance() {
                               <Switch
                                 checked={student.status === 'Present'}
                                 aria-hidden="true"
+                                onCheckedChange={() => {}} // Disable Switch's own onChange
+                                className="pointer-events-none" // Make Switch non-interactive
                               />
                               <span className="text-xs text-gray-500">
                                 {student.status === 'Present' ? 'Present' : 'Absent'}

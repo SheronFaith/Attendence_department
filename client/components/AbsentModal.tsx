@@ -13,12 +13,11 @@ export function AbsentModal({ open, onClose, onSelect, studentName }: AbsentModa
   const firstButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    console.log('AbsentModal rendered - open:', open, 'studentName:', studentName, 'onSelect type:', typeof onSelect);
     if (open && firstButtonRef.current) {
       // Focus the first button when modal opens
       setTimeout(() => firstButtonRef.current?.focus(), 100);
     }
-  }, [open, studentName, onSelect]);
+  }, [open]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {

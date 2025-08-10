@@ -37,12 +37,6 @@ export function AbsentModal({ open, onClose, onSelect, studentName }: AbsentModa
     onClose();
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      onClose();
-    }
-  };
-
   if (!open) return null;
 
   return (

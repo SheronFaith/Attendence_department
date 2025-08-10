@@ -201,9 +201,13 @@ export default function StaffAttendance() {
                     <CardDescription>
                       {course.courseType} • Section {course.section} • Year {course.year}
                     </CardDescription>
-                    <Badge variant={course.courseType === 'Elective' ? 'default' : 'secondary'}>
+                    <span className={`px-2 py-1 rounded-md text-xs font-medium ${
+                      course.courseType === 'Elective'
+                        ? 'bg-blue-100 text-blue-800'
+                        : 'bg-gray-100 text-gray-800'
+                    }`}>
                       {course.courseType}
-                    </Badge>
+                    </span>
                   </div>
                 </div>
                 <div className="flex gap-4 text-sm text-gray-600">

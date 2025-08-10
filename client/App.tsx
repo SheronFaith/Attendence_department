@@ -49,12 +49,18 @@ const App = () => (
 
 const container = document.getElementById("root")!;
 
-// Check if root already exists to prevent multiple createRoot calls
-if (!container._reactRootContainer) {
-  const root = createRoot(container);
-  container._reactRootContainer = root;
-  root.render(<App />);
+// Store root reference to prevent multiple createRoot calls during HMR
+let root: ReturnType<typeof createRoot>;
+
+if (import.meta.hot) {
+  // In development with HMR
+  if (!window.__reactRoot) {
+    window.__reactRoot = createRoot(container);
+  }
+  root = window.__reactRoot;
 } else {
-  // Re-render on existing root
-  container._reactRootContainer.render(<App />);
+  // In production
+  root = createRoot(container);
 }
+
+root.render(<App />);

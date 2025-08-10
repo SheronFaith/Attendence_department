@@ -86,14 +86,16 @@ export default function StaffAttendance() {
   const handleAbsentSelect = (type: 'OD' | 'Leave') => {
     console.log('handleAbsentSelect called with:', type, 'selectedStudent:', selectedStudent?.studentName);
     if (selectedStudent) {
-      flushSync(() => {
-        setStudents(prev =>
-          prev.map(s =>
-            s.id === selectedStudent.id
-              ? { ...s, status: type }
-              : s
-          )
+      const studentId = selectedStudent.id; // Capture the ID before clearing selectedStudent
+
+      setStudents(prev => {
+        const newStudents = prev.map(s =>
+          s.id === studentId
+            ? { ...s, status: type }
+            : s
         );
+        console.log('New students state:', newStudents.map(s => ({ name: s.studentName, status: s.status })));
+        return newStudents;
       });
       console.log('Student status updated');
     }

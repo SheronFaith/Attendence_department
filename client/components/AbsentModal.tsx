@@ -33,8 +33,14 @@ export function AbsentModal({ open, onClose, onSelect, studentName }: AbsentModa
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-xl"
+        onClick={(e) => e.stopPropagation()}
+      >
         <h2 className="text-lg font-semibold mb-2">Mark as Absent</h2>
         <p className="text-gray-600 mb-4">
           {studentName ? `Mark ${studentName} as:` : 'Select absence type:'}

@@ -263,8 +263,8 @@ export default function AdminViewAttendance() {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {currentEntries.map((entry) => (
-                        <tr key={entry.studentId} className="hover:bg-gray-50">
+                      {currentEntries.map((entry, index) => (
+                        <tr key={`${entry.studentId}-${entry.courseName}-${index}`} className="hover:bg-gray-50">
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900">
                             {entry.studentRollNo}
                           </td>

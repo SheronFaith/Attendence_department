@@ -40,12 +40,12 @@ export default function AdminReports() {
   }, [navigate]);
 
   const mockReportData: ReportData[] = [
-    { id: 1, rollNo: 'CSE101', studentName: 'John Doe', section: 'A', presentDays: 18, totalDays: 20, odDays: 1, leaveDays: 1, percentage: 90 },
-    { id: 2, rollNo: 'CSE102', studentName: 'Jane Smith', section: 'A', presentDays: 19, totalDays: 20, odDays: 1, leaveDays: 0, percentage: 95 },
-    { id: 3, rollNo: 'CSE103', studentName: 'Bob Johnson', section: 'B', presentDays: 16, totalDays: 20, odDays: 2, leaveDays: 2, percentage: 80 },
-    { id: 4, rollNo: 'CSE104', studentName: 'Alice Brown', section: 'B', presentDays: 20, totalDays: 20, odDays: 0, leaveDays: 0, percentage: 100 },
-    { id: 5, rollNo: 'CSE105', studentName: 'Charlie Wilson', section: 'C', presentDays: 17, totalDays: 20, odDays: 2, leaveDays: 1, percentage: 85 },
-    { id: 6, rollNo: 'CSE106', studentName: 'Diana Davis', section: 'C', presentDays: 15, totalDays: 20, odDays: 1, leaveDays: 4, percentage: 75 },
+    { id: 1, rollNo: 'CSE101', studentName: 'John Doe', section: '1', presentDays: 18, totalDays: 20, odDays: 1, leaveDays: 1, percentage: 90 },
+    { id: 2, rollNo: 'CSE102', studentName: 'Jane Smith', section: '1', presentDays: 19, totalDays: 20, odDays: 1, leaveDays: 0, percentage: 95 },
+    { id: 3, rollNo: 'CSE103', studentName: 'Bob Johnson', section: '2', presentDays: 16, totalDays: 20, odDays: 2, leaveDays: 2, percentage: 80 },
+    { id: 4, rollNo: 'CSE104', studentName: 'Alice Brown', section: '2', presentDays: 20, totalDays: 20, odDays: 0, leaveDays: 0, percentage: 100 },
+    { id: 5, rollNo: 'CSE105', studentName: 'Charlie Wilson', section: '3', presentDays: 17, totalDays: 20, odDays: 2, leaveDays: 1, percentage: 85 },
+    { id: 6, rollNo: 'CSE106', studentName: 'Diana Davis', section: '3', presentDays: 15, totalDays: 20, odDays: 1, leaveDays: 4, percentage: 75 },
   ];
 
   const handleGenerateReport = () => {

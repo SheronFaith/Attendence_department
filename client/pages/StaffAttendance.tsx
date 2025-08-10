@@ -86,10 +86,11 @@ export default function StaffAttendance() {
   };
 
   const handleAbsentSelect = (type: 'OD' | 'Leave') => {
+    console.log('Modal selection:', type, 'for student:', selectedStudent?.studentName);
     if (selectedStudent) {
-      setStudents(prev => 
-        prev.map(s => 
-          s.id === selectedStudent.id 
+      setStudents(prev =>
+        prev.map(s =>
+          s.id === selectedStudent.id
             ? { ...s, status: type }
             : s
         )
@@ -97,7 +98,7 @@ export default function StaffAttendance() {
     }
     setIsModalOpen(false);
     setSelectedStudent(null);
-    
+
     // Return focus to the toggled button
     setTimeout(() => {
       lastToggledRef.current?.focus();

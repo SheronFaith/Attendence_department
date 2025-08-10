@@ -57,11 +57,16 @@ export interface User {
 
 // Mock data
 export const mockStaff: Staff[] = [
-  { id: 101, staffName: "Dr. Sheron", username: "staff1", password: "pass" }
+  { id: 101, staffName: "Dr. Sheron", username: "staff1", password: "pass" },
 ];
 
 export const mockAdmins: Admin[] = [
-  { id: 9001, adminName: "Super Admin", username: "admin", password: "adminpass" }
+  {
+    id: 9001,
+    adminName: "Super Admin",
+    username: "admin",
+    password: "adminpass",
+  },
 ];
 
 export const mockCourses: Course[] = [
@@ -73,7 +78,7 @@ export const mockCourses: Course[] = [
     courseType: "Elective",
     section: "2",
     year: 4,
-    staffId: 101
+    staffId: 101,
   },
   {
     id: 2,
@@ -83,21 +88,45 @@ export const mockCourses: Course[] = [
     courseType: "Common",
     section: "1",
     year: 2,
-    staffId: 101
-  }
+    staffId: 101,
+  },
 ];
 
 export const mockStudents: Student[] = [
-  { id: 201, studentName: "Alice Sharma", studentRollNo: "CSE201", courseBatch: "BATCH-A", studentSection: "2" },
-  { id: 202, studentName: "Ravi Kumar", studentRollNo: "CSE202", courseBatch: "BATCH-A", studentSection: "2" },
-  { id: 301, studentName: "Priya Nair", studentRollNo: "CSE101", courseBatch: "COMMON-1", studentSection: "1" },
-  { id: 302, studentName: "Rahul Das", studentRollNo: "CSE102", courseBatch: "COMMON-1", studentSection: "1" }
+  {
+    id: 201,
+    studentName: "Alice Sharma",
+    studentRollNo: "CSE201",
+    courseBatch: "BATCH-A",
+    studentSection: "2",
+  },
+  {
+    id: 202,
+    studentName: "Ravi Kumar",
+    studentRollNo: "CSE202",
+    courseBatch: "BATCH-A",
+    studentSection: "2",
+  },
+  {
+    id: 301,
+    studentName: "Priya Nair",
+    studentRollNo: "CSE101",
+    courseBatch: "COMMON-1",
+    studentSection: "1",
+  },
+  {
+    id: 302,
+    studentName: "Rahul Das",
+    studentRollNo: "CSE102",
+    courseBatch: "COMMON-1",
+    studentSection: "1",
+  },
 ];
 
 // Utility functions for localStorage operations
 export const storageKeys = {
   user: "user",
-  attendanceRecords: "attendance_records"
+  attendanceRecords: "attendance_records",
 } as const;
 
 export function saveUser(user: User): void {
@@ -116,7 +145,10 @@ export function clearUser(): void {
 export function saveAttendanceRecord(record: AttendanceRecord): void {
   const existingRecords = getAttendanceRecords();
   const updatedRecords = [...existingRecords, record];
-  localStorage.setItem(storageKeys.attendanceRecords, JSON.stringify(updatedRecords));
+  localStorage.setItem(
+    storageKeys.attendanceRecords,
+    JSON.stringify(updatedRecords),
+  );
 }
 
 export function getAttendanceRecords(): AttendanceRecord[] {
@@ -126,14 +158,18 @@ export function getAttendanceRecords(): AttendanceRecord[] {
 
 export function getStudentsForCourse(course: Course): Student[] {
   if (course.courseType === "Elective") {
-    return mockStudents.filter(student => student.courseBatch === course.courseBatch);
+    return mockStudents.filter(
+      (student) => student.courseBatch === course.courseBatch,
+    );
   } else {
-    return mockStudents.filter(student => student.studentSection === course.section);
+    return mockStudents.filter(
+      (student) => student.studentSection === course.section,
+    );
   }
 }
 
 export function getCurrentDate(): string {
-  return new Date().toISOString().split('T')[0];
+  return new Date().toISOString().split("T")[0];
 }
 
 export function generateTimestampId(): number {

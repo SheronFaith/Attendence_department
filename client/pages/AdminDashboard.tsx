@@ -1,24 +1,30 @@
-import { useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { getUser, clearUser } from '@/lib/mockData';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { LogOut, Users, Calendar, BarChart3 } from 'lucide-react';
+import { useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { getUser, clearUser } from "@/lib/mockData";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { LogOut, Users, Calendar, BarChart3 } from "lucide-react";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
     const user = getUser();
-    if (!user || user.role !== 'admin') {
-      navigate('/');
+    if (!user || user.role !== "admin") {
+      navigate("/");
       return;
     }
   }, [navigate]);
 
   const handleLogout = () => {
     clearUser();
-    navigate('/');
+    navigate("/");
   };
 
   return (
@@ -28,7 +34,9 @@ export default function AdminDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div>
-              <h1 className="text-xl font-semibold text-gray-900">Admin Dashboard</h1>
+              <h1 className="text-xl font-semibold text-gray-900">
+                Admin Dashboard
+              </h1>
               <p className="text-sm text-gray-600">Welcome, Super Admin</p>
             </div>
             <Button
@@ -73,9 +81,7 @@ export default function AdminDashboard() {
               </CardHeader>
               <CardContent>
                 <Link to="/admin/view-attendance">
-                  <Button className="w-full">
-                    View Attendance Records
-                  </Button>
+                  <Button className="w-full">View Attendance Records</Button>
                 </Link>
               </CardContent>
             </Card>
@@ -88,7 +94,9 @@ export default function AdminDashboard() {
                     <Users className="h-6 w-6 text-green-600" />
                   </div>
                   <div>
-                    <CardTitle className="text-lg">Student Management</CardTitle>
+                    <CardTitle className="text-lg">
+                      Student Management
+                    </CardTitle>
                     <CardDescription>
                       Manage student records and enrollments
                     </CardDescription>
@@ -100,7 +108,8 @@ export default function AdminDashboard() {
                   Coming Soon
                 </Button>
                 <p className="text-xs text-gray-500 mt-2">
-                  This feature is being developed. Continue prompting to build it!
+                  This feature is being developed. Continue prompting to build
+                  it!
                 </p>
               </CardContent>
             </Card>
@@ -122,9 +131,7 @@ export default function AdminDashboard() {
               </CardHeader>
               <CardContent>
                 <Link to="/admin/reports">
-                  <Button className="w-full">
-                    Generate Reports
-                  </Button>
+                  <Button className="w-full">Generate Reports</Button>
                 </Link>
               </CardContent>
             </Card>
@@ -168,13 +175,17 @@ export default function AdminDashboard() {
                   <BarChart3 className="h-5 w-5 text-blue-600" />
                 </div>
                 <div>
-                  <h3 className="font-medium text-blue-900">Development Mode</h3>
+                  <h3 className="font-medium text-blue-900">
+                    Development Mode
+                  </h3>
                   <p className="text-sm text-blue-700 mt-1">
-                    This is a placeholder admin dashboard. Continue prompting to build specific features 
-                    like attendance viewing, student management, and reporting systems.
+                    This is a placeholder admin dashboard. Continue prompting to
+                    build specific features like attendance viewing, student
+                    management, and reporting systems.
                   </p>
                   <p className="text-xs text-blue-600 mt-2">
-                    Current features: Login system, Staff dashboard, Attendance marking
+                    Current features: Login system, Staff dashboard, Attendance
+                    marking
                   </p>
                 </div>
               </div>

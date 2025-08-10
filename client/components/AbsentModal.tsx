@@ -1,15 +1,26 @@
-import { useEffect, useRef } from 'react';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useEffect, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface AbsentModalProps {
   open: boolean;
   onClose: () => void;
-  onSelect: (type: 'OD' | 'Leave') => void;
+  onSelect: (type: "OD" | "Leave") => void;
   studentName?: string;
 }
 
-export function AbsentModal({ open, onClose, onSelect, studentName }: AbsentModalProps) {
+export function AbsentModal({
+  open,
+  onClose,
+  onSelect,
+  studentName,
+}: AbsentModalProps) {
   const firstButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -21,19 +32,19 @@ export function AbsentModal({ open, onClose, onSelect, studentName }: AbsentModa
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && open) {
+      if (event.key === "Escape" && open) {
         onClose();
       }
     };
 
     if (open) {
-      document.addEventListener('keydown', handleKeyDown);
-      return () => document.removeEventListener('keydown', handleKeyDown);
+      document.addEventListener("keydown", handleKeyDown);
+      return () => document.removeEventListener("keydown", handleKeyDown);
     }
   }, [open, onClose]);
 
-  const handleSelect = (type: 'OD' | 'Leave') => {
-    console.log('handleSelect called with:', type);
+  const handleSelect = (type: "OD" | "Leave") => {
+    console.log("handleSelect called with:", type);
     onSelect(type);
     onClose();
   };
@@ -51,13 +62,13 @@ export function AbsentModal({ open, onClose, onSelect, studentName }: AbsentModa
       >
         <h2 className="text-lg font-semibold mb-2">Mark as Absent</h2>
         <p className="text-gray-600 mb-4">
-          {studentName ? `Mark ${studentName} as:` : 'Select absence type:'}
+          {studentName ? `Mark ${studentName} as:` : "Select absence type:"}
         </p>
 
         <div className="flex flex-col gap-3">
           <Button
             ref={firstButtonRef}
-            onClick={() => handleSelect('OD')}
+            onClick={() => handleSelect("OD")}
             size="lg"
             className="h-12 text-base"
           >
@@ -65,7 +76,7 @@ export function AbsentModal({ open, onClose, onSelect, studentName }: AbsentModa
           </Button>
 
           <Button
-            onClick={() => handleSelect('Leave')}
+            onClick={() => handleSelect("Leave")}
             variant="outline"
             size="lg"
             className="h-12 text-base"

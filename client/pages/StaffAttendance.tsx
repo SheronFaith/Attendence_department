@@ -1,27 +1,33 @@
-import { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { 
-  mockCourses, 
-  getUser, 
-  getStudentsForCourse, 
-  saveAttendanceRecord, 
-  getCurrentDate, 
+import { useState, useEffect, useRef } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import {
+  mockCourses,
+  getUser,
+  getStudentsForCourse,
+  saveAttendanceRecord,
+  getCurrentDate,
   generateTimestampId,
-  type Course, 
-  type Student, 
-  type AttendanceEntry 
-} from '@/lib/mockData';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Switch } from '@/components/ui/switch';
-import { AbsentModal } from '@/components/AbsentModal';
-import { showToast } from '@/components/Toast';
-import { ArrowLeft, Users, Calendar, Clock } from 'lucide-react';
+  type Course,
+  type Student,
+  type AttendanceEntry,
+} from "@/lib/mockData";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
+import { AbsentModal } from "@/components/AbsentModal";
+import { showToast } from "@/components/Toast";
+import { ArrowLeft, Users, Calendar, Clock } from "lucide-react";
 
 interface StudentAttendance extends Student {
-  status: 'Present' | 'OD' | 'Leave';
+  status: "Present" | "OD" | "Leave";
 }
 
 export default function StaffAttendance() {
@@ -34,73 +40,81 @@ export default function StaffAttendance() {
   const [periodFrom, setPeriodFrom] = useState(1);
   const [periodTo, setPeriodTo] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedStudent, setSelectedStudent] = useState<StudentAttendance | null>(null);
+  const [selectedStudent, setSelectedStudent] =
+    useState<StudentAttendance | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const lastToggledRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     const user = getUser();
-    if (!user || user.role !== 'staff') {
-      navigate('/');
+    if (!user || user.role !== "staff") {
+      navigate("/");
       return;
     }
 
     if (!courseId) {
-      navigate('/staff');
+      navigate("/staff");
       return;
     }
 
-    const foundCourse = mockCourses.find(c => c.id === parseInt(courseId));
+    const foundCourse = mockCourses.find((c) => c.id === parseInt(courseId));
     if (!foundCourse || foundCourse.staffId !== user.id) {
-      navigate('/staff');
+      navigate("/staff");
       return;
     }
 
     setCourse(foundCourse);
-    
+
     const courseStudents = getStudentsForCourse(foundCourse);
     const sortedStudents = courseStudents
       .sort((a, b) => a.studentRollNo.localeCompare(b.studentRollNo))
-      .map(student => ({ ...student, status: 'Present' as const }));
-    
+      .map((student) => ({ ...student, status: "Present" as const }));
+
     setStudents(sortedStudents);
   }, [courseId, navigate]);
 
-  const handleToggle = (student: StudentAttendance, buttonRef: HTMLButtonElement) => {
-    if (student.status === 'Present') {
+  const handleToggle = (
+    student: StudentAttendance,
+    buttonRef: HTMLButtonElement,
+  ) => {
+    if (student.status === "Present") {
       setSelectedStudent(student);
       setIsModalOpen(true);
       lastToggledRef.current = buttonRef;
     } else {
       // Change back to Present
-      setStudents(prev =>
-        prev.map(s =>
-          s.id === student.id
-            ? { ...s, status: 'Present' }
-            : s
-        )
+      setStudents((prev) =>
+        prev.map((s) =>
+          s.id === student.id ? { ...s, status: "Present" } : s,
+        ),
       );
     }
   };
 
-  const handleAbsentSelect = (type: 'OD' | 'Leave') => {
-    console.log('handleAbsentSelect called with:', type, 'selectedStudent:', selectedStudent?.studentName);
+  const handleAbsentSelect = (type: "OD" | "Leave") => {
+    console.log(
+      "handleAbsentSelect called with:",
+      type,
+      "selectedStudent:",
+      selectedStudent?.studentName,
+    );
     if (selectedStudent) {
       const studentId = selectedStudent.id; // Capture the ID before clearing selectedStudent
 
-      setStudents(prev => {
-        const newStudents = prev.map(s =>
-          s.id === studentId
-            ? { ...s, status: type }
-            : s
+      setStudents((prev) => {
+        const newStudents = prev.map((s) =>
+          s.id === studentId ? { ...s, status: type } : s,
         );
-        console.log('New students state:', newStudents.map(s => ({ name: s.studentName, status: s.status })));
+        console.log(
+          "New students state:",
+          newStudents.map((s) => ({ name: s.studentName, status: s.status })),
+        );
         return newStudents;
       });
 
       // Force a re-render
-      setForceUpdate(prev => prev + 1);
-      console.log('Student status updated');
+      setForceUpdate((prev) => prev + 1);
+      console.log("Student status updated");
     }
     setIsModalOpen(false);
     setSelectedStudent(null);
@@ -113,20 +127,20 @@ export default function StaffAttendance() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (students.length === 0) {
-      showToast('No students found for this course', 3000);
+      showToast("No students found for this course", 3000);
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      const entries: AttendanceEntry[] = students.map(student => ({
+      const entries: AttendanceEntry[] = students.map((student) => ({
         studentId: student.id,
         studentRollNo: student.studentRollNo,
         studentName: student.studentName,
-        status: student.status
+        status: student.status,
       }));
 
       const attendanceRecord = {
@@ -136,7 +150,7 @@ export default function StaffAttendance() {
         date,
         periodFrom,
         periodTo,
-        entries
+        entries,
       };
 
       saveAttendanceRecord(attendanceRecord);
@@ -152,17 +166,19 @@ export default function StaffAttendance() {
       //   return;
       // }
 
-      showToast('Attendance saved locally. Replace with API call when backend is ready.');
-      navigate('/staff');
+      showToast(
+        "Attendance saved locally. Replace with API call when backend is ready.",
+      );
+      navigate("/staff");
     } catch (error) {
-      showToast('Failed to save attendance. Please try again.', 5000);
+      showToast("Failed to save attendance. Please try again.", 5000);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleCancel = () => {
-    navigate('/staff');
+    navigate("/staff");
   };
 
   if (!course) {
@@ -175,9 +191,9 @@ export default function StaffAttendance() {
     );
   }
 
-  const presentCount = students.filter(s => s.status === 'Present').length;
-  const odCount = students.filter(s => s.status === 'OD').length;
-  const leaveCount = students.filter(s => s.status === 'Leave').length;
+  const presentCount = students.filter((s) => s.status === "Present").length;
+  const odCount = students.filter((s) => s.status === "OD").length;
+  const leaveCount = students.filter((s) => s.status === "Leave").length;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -185,8 +201,8 @@ export default function StaffAttendance() {
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center h-16">
-            <Link 
-              to="/staff" 
+            <Link
+              to="/staff"
               className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
             >
               <ArrowLeft className="h-4 w-4" />
@@ -209,13 +225,16 @@ export default function StaffAttendance() {
                   </CardTitle>
                   <div className="flex items-center gap-4 mt-2">
                     <CardDescription>
-                      {course.courseType} • Section {course.section} • Year {course.year}
+                      {course.courseType} • Section {course.section} • Year{" "}
+                      {course.year}
                     </CardDescription>
-                    <span className={`px-2 py-1 rounded-md text-xs font-medium ${
-                      course.courseType === 'Elective'
-                        ? 'bg-blue-100 text-blue-800'
-                        : 'bg-gray-100 text-gray-800'
-                    }`}>
+                    <span
+                      className={`px-2 py-1 rounded-md text-xs font-medium ${
+                        course.courseType === "Elective"
+                          ? "bg-blue-100 text-blue-800"
+                          : "bg-gray-100 text-gray-800"
+                      }`}
+                    >
                       {course.courseType}
                     </span>
                   </div>
@@ -233,8 +252,9 @@ export default function StaffAttendance() {
           {/* Instructions */}
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p className="text-blue-800 text-sm">
-              <strong>Instructions:</strong> All students default to Present. 
-              For absent students, toggle off and choose OD or Leave when prompted.
+              <strong>Instructions:</strong> All students default to Present.
+              For absent students, toggle off and choose OD or Leave when
+              prompted.
             </p>
           </div>
 
@@ -267,7 +287,9 @@ export default function StaffAttendance() {
                     min="1"
                     max="10"
                     value={periodFrom}
-                    onChange={(e) => setPeriodFrom(parseInt(e.target.value) || 1)}
+                    onChange={(e) =>
+                      setPeriodFrom(parseInt(e.target.value) || 1)
+                    }
                     required
                   />
                 </div>
@@ -291,15 +313,21 @@ export default function StaffAttendance() {
               <CardContent className="pt-6">
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
-                    <p className="text-2xl font-bold text-green-600">{presentCount}</p>
+                    <p className="text-2xl font-bold text-green-600">
+                      {presentCount}
+                    </p>
                     <p className="text-sm text-gray-600">Present</p>
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-blue-600">{odCount}</p>
+                    <p className="text-2xl font-bold text-blue-600">
+                      {odCount}
+                    </p>
                     <p className="text-sm text-gray-600">OD</p>
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-orange-600">{leaveCount}</p>
+                    <p className="text-2xl font-bold text-orange-600">
+                      {leaveCount}
+                    </p>
                     <p className="text-sm text-gray-600">Leave</p>
                   </div>
                 </div>
@@ -346,12 +374,18 @@ export default function StaffAttendance() {
                               onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                handleToggle(student, e.currentTarget as HTMLButtonElement);
+                                handleToggle(
+                                  student,
+                                  e.currentTarget as HTMLButtonElement,
+                                );
                               }}
                               onKeyDown={(e) => {
-                                if (e.key === 'Enter' || e.key === ' ') {
+                                if (e.key === "Enter" || e.key === " ") {
                                   e.preventDefault();
-                                  handleToggle(student, e.currentTarget as HTMLButtonElement);
+                                  handleToggle(
+                                    student,
+                                    e.currentTarget as HTMLButtonElement,
+                                  );
                                 }
                               }}
                               className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md p-1 cursor-pointer"
@@ -359,19 +393,29 @@ export default function StaffAttendance() {
                             >
                               <Switch
                                 key={`${student.id}-${student.status}-${forceUpdate}`}
-                                checked={student.status === 'Present'}
+                                checked={student.status === "Present"}
                                 aria-hidden="true"
                                 onCheckedChange={() => {}} // Disable Switch's own onChange
                                 className="pointer-events-none" // Make Switch non-interactive
                               />
-                              <span className={`text-xs font-medium ${
-                                student.status === 'Present' ? 'text-green-600' :
-                                student.status === 'OD' ? 'text-blue-600' : 'text-red-600'
-                              }`}>
-                                {student.status === 'Present' ? 'Present' :
-                                 student.status === 'OD' ? 'OD' : 'Leave'}
+                              <span
+                                className={`text-xs font-medium ${
+                                  student.status === "Present"
+                                    ? "text-green-600"
+                                    : student.status === "OD"
+                                      ? "text-blue-600"
+                                      : "text-red-600"
+                                }`}
+                              >
+                                {student.status === "Present"
+                                  ? "Present"
+                                  : student.status === "OD"
+                                    ? "OD"
+                                    : "Leave"}
                                 {/* Debug: show actual status */}
-                                <span className="text-xs text-gray-400 ml-1">({student.status})</span>
+                                <span className="text-xs text-gray-400 ml-1">
+                                  ({student.status})
+                                </span>
                               </span>
                             </div>
                           </td>
@@ -398,7 +442,7 @@ export default function StaffAttendance() {
                 disabled={isSubmitting}
                 className="sm:w-auto"
               >
-                {isSubmitting ? 'Saving...' : 'Submit Attendance'}
+                {isSubmitting ? "Saving..." : "Submit Attendance"}
               </Button>
             </div>
           </form>

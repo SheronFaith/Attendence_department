@@ -1,42 +1,67 @@
-import { useState, useEffect, useMemo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { getUser, getAttendanceRecords, getCurrentDate, type AttendanceRecord } from '@/lib/mockData';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Search, ChevronLeft, ChevronRight, ArrowUpDown } from 'lucide-react';
+import { useState, useEffect, useMemo } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  getUser,
+  getAttendanceRecords,
+  getCurrentDate,
+  type AttendanceRecord,
+} from "@/lib/mockData";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  ArrowLeft,
+  Search,
+  ChevronLeft,
+  ChevronRight,
+  ArrowUpDown,
+} from "lucide-react";
 
 interface AttendanceEntry {
   studentId: number;
   studentRollNo: string;
   studentName: string;
-  status: 'Present' | 'OD' | 'Leave';
+  status: "Present" | "OD" | "Leave";
   section: string;
   courseName: string;
 }
 
-type SortOrder = 'asc' | 'desc';
-type SortField = 'rollNo' | 'section' | 'status' | 'course';
+type SortOrder = "asc" | "desc";
+type SortField = "rollNo" | "section" | "status" | "course";
 
 export default function AdminViewAttendance() {
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState(getCurrentDate());
-  const [selectedPeriod, setSelectedPeriod] = useState('1');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedPeriod, setSelectedPeriod] = useState("1");
+  const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortField, setSortField] = useState<SortField>('rollNo');
-  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
-  const [attendanceEntries, setAttendanceEntries] = useState<AttendanceEntry[]>([]);
+  const [sortField, setSortField] = useState<SortField>("rollNo");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
+  const [attendanceEntries, setAttendanceEntries] = useState<AttendanceEntry[]>(
+    [],
+  );
 
   const itemsPerPage = 10;
 
   useEffect(() => {
     const user = getUser();
-    if (!user || user.role !== 'admin') {
-      navigate('/');
+    if (!user || user.role !== "admin") {
+      navigate("/");
       return;
     }
   }, [navigate]);
@@ -45,21 +70,22 @@ export default function AdminViewAttendance() {
     // Filter attendance records based on selected date and period
     const records = getAttendanceRecords();
     const period = parseInt(selectedPeriod);
-    
-    const filteredRecords = records.filter(record => 
-      record.date === selectedDate && 
-      period >= record.periodFrom && 
-      period <= record.periodTo
+
+    const filteredRecords = records.filter(
+      (record) =>
+        record.date === selectedDate &&
+        period >= record.periodFrom &&
+        period <= record.periodTo,
     );
 
     // Flatten entries from all matching records
     const entries: AttendanceEntry[] = [];
-    filteredRecords.forEach(record => {
-      record.entries.forEach(entry => {
+    filteredRecords.forEach((record) => {
+      record.entries.forEach((entry) => {
         entries.push({
           ...entry,
-          section: '1', // Mock section data - in real app this would come from student data
-          courseName: record.courseName
+          section: "1", // Mock section data - in real app this would come from student data
+          courseName: record.courseName,
         });
       });
     });
@@ -67,26 +93,97 @@ export default function AdminViewAttendance() {
     // Add mock data if no records found to show the UI
     if (entries.length === 0) {
       const mockEntries: AttendanceEntry[] = [
-        { studentId: 1001, studentRollNo: 'CSE101', studentName: 'John Doe', status: 'Present', section: '1', courseName: 'Computer Science' },
-        { studentId: 1002, studentRollNo: 'CSE102', studentName: 'Jane Smith', status: 'OD', section: '1', courseName: 'Computer Science' },
-        { studentId: 1003, studentRollNo: 'CSE103', studentName: 'Bob Johnson', status: 'Leave', section: '2', courseName: 'Mathematics' },
-        { studentId: 1004, studentRollNo: 'CSE104', studentName: 'Alice Brown', status: 'Present', section: '2', courseName: 'Mathematics' },
-        { studentId: 1005, studentRollNo: 'CSE105', studentName: 'Charlie Wilson', status: 'OD', section: '1', courseName: 'Computer Science' },
-        { studentId: 1006, studentRollNo: 'CSE106', studentName: 'Diana Davis', status: 'Present', section: '3', courseName: 'Physics' },
-        { studentId: 1007, studentRollNo: 'CSE107', studentName: 'Eve Miller', status: 'Leave', section: '3', courseName: 'Physics' },
-        { studentId: 1008, studentRollNo: 'CSE108', studentName: 'Frank Garcia', status: 'Present', section: '2', courseName: 'Mathematics' },
-        { studentId: 1009, studentRollNo: 'CSE109', studentName: 'Grace Martinez', status: 'OD', section: '1', courseName: 'Computer Science' },
-        { studentId: 1010, studentRollNo: 'CSE110', studentName: 'Henry Lee', status: 'Present', section: '3', courseName: 'Physics' },
+        {
+          studentId: 1001,
+          studentRollNo: "CSE101",
+          studentName: "John Doe",
+          status: "Present",
+          section: "1",
+          courseName: "Computer Science",
+        },
+        {
+          studentId: 1002,
+          studentRollNo: "CSE102",
+          studentName: "Jane Smith",
+          status: "OD",
+          section: "1",
+          courseName: "Computer Science",
+        },
+        {
+          studentId: 1003,
+          studentRollNo: "CSE103",
+          studentName: "Bob Johnson",
+          status: "Leave",
+          section: "2",
+          courseName: "Mathematics",
+        },
+        {
+          studentId: 1004,
+          studentRollNo: "CSE104",
+          studentName: "Alice Brown",
+          status: "Present",
+          section: "2",
+          courseName: "Mathematics",
+        },
+        {
+          studentId: 1005,
+          studentRollNo: "CSE105",
+          studentName: "Charlie Wilson",
+          status: "OD",
+          section: "1",
+          courseName: "Computer Science",
+        },
+        {
+          studentId: 1006,
+          studentRollNo: "CSE106",
+          studentName: "Diana Davis",
+          status: "Present",
+          section: "3",
+          courseName: "Physics",
+        },
+        {
+          studentId: 1007,
+          studentRollNo: "CSE107",
+          studentName: "Eve Miller",
+          status: "Leave",
+          section: "3",
+          courseName: "Physics",
+        },
+        {
+          studentId: 1008,
+          studentRollNo: "CSE108",
+          studentName: "Frank Garcia",
+          status: "Present",
+          section: "2",
+          courseName: "Mathematics",
+        },
+        {
+          studentId: 1009,
+          studentRollNo: "CSE109",
+          studentName: "Grace Martinez",
+          status: "OD",
+          section: "1",
+          courseName: "Computer Science",
+        },
+        {
+          studentId: 1010,
+          studentRollNo: "CSE110",
+          studentName: "Henry Lee",
+          status: "Present",
+          section: "3",
+          courseName: "Physics",
+        },
       ];
       setAttendanceEntries(mockEntries);
     } else {
       // Deduplicate entries by studentId to prevent duplicate keys
-      const uniqueEntries = entries.filter((entry, index, arr) =>
-        arr.findIndex(e => e.studentId === entry.studentId) === index
+      const uniqueEntries = entries.filter(
+        (entry, index, arr) =>
+          arr.findIndex((e) => e.studentId === entry.studentId) === index,
       );
       setAttendanceEntries(uniqueEntries);
     }
-    
+
     setCurrentPage(1); // Reset to first page when filters change
   }, [selectedDate, selectedPeriod]);
 
@@ -96,9 +193,10 @@ export default function AdminViewAttendance() {
 
     // Apply search filter
     if (searchQuery.trim()) {
-      filtered = filtered.filter(entry =>
-        entry.studentName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        entry.studentRollNo.toLowerCase().includes(searchQuery.toLowerCase())
+      filtered = filtered.filter(
+        (entry) =>
+          entry.studentName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          entry.studentRollNo.toLowerCase().includes(searchQuery.toLowerCase()),
       );
     }
 
@@ -107,25 +205,25 @@ export default function AdminViewAttendance() {
       let comparison = 0;
 
       switch (sortField) {
-        case 'rollNo':
+        case "rollNo":
           comparison = a.studentRollNo.localeCompare(b.studentRollNo);
           break;
-        case 'section':
+        case "section":
           comparison = a.section.localeCompare(b.section);
           break;
-        case 'status':
+        case "status":
           // Custom order: Present, OD, Leave
-          const statusOrder = { 'Present': 0, 'OD': 1, 'Leave': 2 };
+          const statusOrder = { Present: 0, OD: 1, Leave: 2 };
           comparison = statusOrder[a.status] - statusOrder[b.status];
           break;
-        case 'course':
+        case "course":
           comparison = a.courseName.localeCompare(b.courseName);
           break;
         default:
           comparison = a.studentRollNo.localeCompare(b.studentRollNo);
       }
 
-      return sortOrder === 'asc' ? comparison : -comparison;
+      return sortOrder === "asc" ? comparison : -comparison;
     });
 
     return filtered;
@@ -140,11 +238,11 @@ export default function AdminViewAttendance() {
   const handleSort = (field: SortField) => {
     if (sortField === field) {
       // Same field, toggle order
-      setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
+      setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
     } else {
       // Different field, set new field and default to ascending
       setSortField(field);
-      setSortOrder('asc');
+      setSortOrder("asc");
     }
   };
 
@@ -154,12 +252,24 @@ export default function AdminViewAttendance() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'Present':
-        return <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Present</Badge>;
-      case 'OD':
-        return <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-100">OD</Badge>;
-      case 'Leave':
-        return <Badge className="bg-red-100 text-red-800 hover:bg-red-100">Leave</Badge>;
+      case "Present":
+        return (
+          <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
+            Present
+          </Badge>
+        );
+      case "OD":
+        return (
+          <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-100">
+            OD
+          </Badge>
+        );
+      case "Leave":
+        return (
+          <Badge className="bg-red-100 text-red-800 hover:bg-red-100">
+            Leave
+          </Badge>
+        );
       default:
         return <Badge variant="secondary">{status}</Badge>;
     }
@@ -169,11 +279,11 @@ export default function AdminViewAttendance() {
     const maxVisible = 3;
     let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
     let end = Math.min(totalPages, start + maxVisible - 1);
-    
+
     if (end - start + 1 < maxVisible) {
       start = Math.max(1, end - maxVisible + 1);
     }
-    
+
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   };
 
@@ -183,8 +293,8 @@ export default function AdminViewAttendance() {
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center h-16">
-            <Link 
-              to="/admin" 
+            <Link
+              to="/admin"
               className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
             >
               <ArrowLeft className="h-4 w-4" />
@@ -199,8 +309,12 @@ export default function AdminViewAttendance() {
         <div className="space-y-6">
           {/* Page Header */}
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">View Attendance</h1>
-            <p className="text-gray-600 mt-1">Review attendance records by date and period</p>
+            <h1 className="text-2xl font-bold text-gray-900">
+              View Attendance
+            </h1>
+            <p className="text-gray-600 mt-1">
+              Review attendance records by date and period
+            </p>
           </div>
 
           {/* Filters */}
@@ -221,7 +335,10 @@ export default function AdminViewAttendance() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="period">Period</Label>
-                  <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
+                  <Select
+                    value={selectedPeriod}
+                    onValueChange={setSelectedPeriod}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select period" />
                     </SelectTrigger>
@@ -256,7 +373,8 @@ export default function AdminViewAttendance() {
               <div className="flex justify-between items-center">
                 <CardTitle className="text-lg">Attendance Records</CardTitle>
                 <p className="text-sm text-gray-600">
-                  Showing {currentEntries.length} of {filteredAndSortedEntries.length} records
+                  Showing {currentEntries.length} of{" "}
+                  {filteredAndSortedEntries.length} records
                 </p>
               </div>
             </CardHeader>
@@ -264,7 +382,8 @@ export default function AdminViewAttendance() {
               {currentEntries.length === 0 ? (
                 <div className="p-8 text-center">
                   <p className="text-gray-500">
-                    No attendance records found for the selected date and period.
+                    No attendance records found for the selected date and
+                    period.
                   </p>
                 </div>
               ) : (
@@ -274,16 +393,18 @@ export default function AdminViewAttendance() {
                       <tr>
                         <th className="px-6 py-3 text-left">
                           <button
-                            onClick={() => handleSort('rollNo')}
+                            onClick={() => handleSort("rollNo")}
                             className={`flex items-center gap-1 text-xs font-medium uppercase tracking-wider hover:text-gray-700 ${
-                              sortField === 'rollNo' ? 'text-gray-900' : 'text-gray-500'
+                              sortField === "rollNo"
+                                ? "text-gray-900"
+                                : "text-gray-500"
                             }`}
                           >
                             Roll No
                             <ArrowUpDown className="h-3 w-3" />
-                            {sortField === 'rollNo' && (
+                            {sortField === "rollNo" && (
                               <span className="text-xs ml-1">
-                                {sortOrder === 'asc' ? '↑' : '↓'}
+                                {sortOrder === "asc" ? "↑" : "↓"}
                               </span>
                             )}
                           </button>
@@ -293,48 +414,54 @@ export default function AdminViewAttendance() {
                         </th>
                         <th className="px-6 py-3 text-left">
                           <button
-                            onClick={() => handleSort('section')}
+                            onClick={() => handleSort("section")}
                             className={`flex items-center gap-1 text-xs font-medium uppercase tracking-wider hover:text-gray-700 ${
-                              sortField === 'section' ? 'text-gray-900' : 'text-gray-500'
+                              sortField === "section"
+                                ? "text-gray-900"
+                                : "text-gray-500"
                             }`}
                           >
                             Section
                             <ArrowUpDown className="h-3 w-3" />
-                            {sortField === 'section' && (
+                            {sortField === "section" && (
                               <span className="text-xs ml-1">
-                                {sortOrder === 'asc' ? '↑' : '↓'}
+                                {sortOrder === "asc" ? "↑" : "↓"}
                               </span>
                             )}
                           </button>
                         </th>
                         <th className="px-6 py-3 text-left">
                           <button
-                            onClick={() => handleSort('status')}
+                            onClick={() => handleSort("status")}
                             className={`flex items-center gap-1 text-xs font-medium uppercase tracking-wider hover:text-gray-700 ${
-                              sortField === 'status' ? 'text-gray-900' : 'text-gray-500'
+                              sortField === "status"
+                                ? "text-gray-900"
+                                : "text-gray-500"
                             }`}
                           >
                             Status
                             <ArrowUpDown className="h-3 w-3" />
-                            {sortField === 'status' && (
+                            {sortField === "status" && (
                               <span className="text-xs ml-1">
-                                {sortOrder === 'asc' ? '↑' : '↓'}
+                                {sortOrder === "asc" ? "↑" : "↓"}
                               </span>
                             )}
                           </button>
                         </th>
                         <th className="px-6 py-3 text-left">
                           <button
-                            onClick={() => handleSort('course')}
+                            onClick={() => handleSort("course")}
                             className={`flex items-center gap-1 text-xs font-medium uppercase tracking-wider hover:text-gray-700 ${
-                              sortField === 'course' ? 'text-gray-900' : 'text-gray-500'
+                              sortField === "course"
+                                ? "text-gray-900"
+                                : "text-gray-500"
                             }`}
                           >
                             Course
                             <ArrowUpDown className="h-3 w-3" />
-                            {sortField === 'course' && (
+                            {sortField === "course" && (
                               <span className="text-xs ml-1">
-                                {sortOrder === 'asc' ? '↑' : '↓'}
+                                {sortOrder === "asc" ? "↑" : "↓"}
                               </span>
                             )}
                           </button>
@@ -381,8 +508,8 @@ export default function AdminViewAttendance() {
                   >
                     <ChevronLeft className="h-4 w-4" />
                   </Button>
-                  
-                  {getVisiblePages().map(page => (
+
+                  {getVisiblePages().map((page) => (
                     <Button
                       key={page}
                       variant={currentPage === page ? "default" : "outline"}
@@ -392,7 +519,7 @@ export default function AdminViewAttendance() {
                       {page}
                     </Button>
                   ))}
-                  
+
                   <Button
                     variant="outline"
                     size="sm"

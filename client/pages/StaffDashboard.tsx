@@ -1,23 +1,29 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { mockCourses, getUser, clearUser, type Course } from '@/lib/mockData';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { LogOut, Search } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { mockCourses, getUser, clearUser, type Course } from "@/lib/mockData";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { LogOut, Search } from "lucide-react";
 
 export default function StaffDashboard() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [staffName, setStaffName] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [staffName, setStaffName] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     const user = getUser();
-    if (!user || user.role !== 'staff') {
-      navigate('/');
+    if (!user || user.role !== "staff") {
+      navigate("/");
       return;
     }
 
@@ -26,20 +32,23 @@ export default function StaffDashboard() {
     //   headers: { Authorization: `Bearer ${token}` }
     // });
     // setCourses(response.data);
-    
-    const staffCourses = mockCourses.filter(course => course.staffId === user.id);
+
+    const staffCourses = mockCourses.filter(
+      (course) => course.staffId === user.id,
+    );
     setCourses(staffCourses);
     setFilteredCourses(staffCourses);
-    setStaffName('Dr. Sheron'); // In real app, get from user data
+    setStaffName("Dr. Sheron"); // In real app, get from user data
   }, [navigate]);
 
   useEffect(() => {
-    if (searchQuery.trim() === '') {
+    if (searchQuery.trim() === "") {
       setFilteredCourses(courses);
     } else {
-      const filtered = courses.filter(course =>
-        course.courseName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        course.courseCode.toLowerCase().includes(searchQuery.toLowerCase())
+      const filtered = courses.filter(
+        (course) =>
+          course.courseName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          course.courseCode.toLowerCase().includes(searchQuery.toLowerCase()),
       );
       setFilteredCourses(filtered);
     }
@@ -47,7 +56,7 @@ export default function StaffDashboard() {
 
   const handleLogout = () => {
     clearUser();
-    navigate('/');
+    navigate("/");
   };
 
   return (
@@ -57,7 +66,9 @@ export default function StaffDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div>
-              <h1 className="text-xl font-semibold text-gray-900">Staff Dashboard</h1>
+              <h1 className="text-xl font-semibold text-gray-900">
+                Staff Dashboard
+              </h1>
               <p className="text-sm text-gray-600">Welcome, {staffName}</p>
             </div>
             <Button
@@ -77,9 +88,12 @@ export default function StaffDashboard() {
         <div className="space-y-6">
           {/* Page Title and Description */}
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Assigned Courses</h2>
+            <h2 className="text-2xl font-bold text-gray-900">
+              Assigned Courses
+            </h2>
             <p className="text-gray-600 mt-1">
-              Select a course to mark attendance. Date will be auto-filled on the next screen.
+              Select a course to mark attendance. Date will be auto-filled on
+              the next screen.
             </p>
           </div>
 
@@ -101,7 +115,9 @@ export default function StaffDashboard() {
               <CardContent className="flex items-center justify-center py-12">
                 <div className="text-center">
                   <p className="text-gray-500">
-                    {searchQuery ? 'No courses found matching your search.' : 'No courses assigned.'}
+                    {searchQuery
+                      ? "No courses found matching your search."
+                      : "No courses assigned."}
                   </p>
                 </div>
               </CardContent>
@@ -109,7 +125,10 @@ export default function StaffDashboard() {
           ) : (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {filteredCourses.map((course) => (
-                <Card key={course.id} className="hover:shadow-md transition-shadow">
+                <Card
+                  key={course.id}
+                  className="hover:shadow-md transition-shadow"
+                >
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
                       <div className="space-y-1 flex-1">
@@ -120,8 +139,12 @@ export default function StaffDashboard() {
                           {course.courseCode}
                         </CardDescription>
                       </div>
-                      <Badge 
-                        variant={course.courseType === 'Elective' ? 'default' : 'secondary'}
+                      <Badge
+                        variant={
+                          course.courseType === "Elective"
+                            ? "default"
+                            : "secondary"
+                        }
                         className="ml-2"
                       >
                         {course.courseType}
@@ -131,7 +154,9 @@ export default function StaffDashboard() {
                   <CardContent className="space-y-3">
                     <div className="grid grid-cols-2 gap-2 text-sm">
                       <div>
-                        <span className="font-medium text-gray-700">Section:</span>
+                        <span className="font-medium text-gray-700">
+                          Section:
+                        </span>
                         <span className="ml-1">{course.section}</span>
                       </div>
                       <div>
@@ -191,8 +216,12 @@ export default function StaffDashboard() {
                             {course.courseCode}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <Badge 
-                              variant={course.courseType === 'Elective' ? 'default' : 'secondary'}
+                            <Badge
+                              variant={
+                                course.courseType === "Elective"
+                                  ? "default"
+                                  : "secondary"
+                              }
                             >
                               {course.courseType}
                             </Badge>
@@ -205,9 +234,7 @@ export default function StaffDashboard() {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             <Link to={`/staff/attendance/${course.id}`}>
-                              <Button size="sm">
-                                Mark Attendance
-                              </Button>
+                              <Button size="sm">Mark Attendance</Button>
                             </Link>
                           </td>
                         </tr>

@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { CheckCircle, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { useState, useEffect } from "react";
+import { CheckCircle, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ToastProps {
   message: string;
@@ -24,7 +24,7 @@ export function Toast({ message, duration = 3000, onClose }: ToastProps) {
     <div
       className={cn(
         "fixed top-4 right-4 z-50 flex items-center gap-3 bg-green-600 text-white px-4 py-3 rounded-lg shadow-lg transition-all duration-300 max-w-md",
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2",
       )}
       role="alert"
       aria-live="polite"
@@ -57,11 +57,11 @@ interface ToastItem {
 
 export function showToast(message: string, duration = 3000) {
   if (!setToasts) return;
-  
+
   const id = ++toastCounter;
   const toast = { id, message, duration };
-  
-  setToasts(prev => [...prev, toast]);
+
+  setToasts((prev) => [...prev, toast]);
 }
 
 export function ToastContainer() {
@@ -75,12 +75,12 @@ export function ToastContainer() {
   }, []);
 
   const removeToast = (id: number) => {
-    setToastsState(prev => prev.filter(toast => toast.id !== id));
+    setToastsState((prev) => prev.filter((toast) => toast.id !== id));
   };
 
   return (
     <div className="fixed top-4 right-4 z-50 space-y-2">
-      {toasts.map(toast => (
+      {toasts.map((toast) => (
         <Toast
           key={toast.id}
           message={toast.message}

@@ -1,14 +1,38 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { getUser, getCurrentDate } from '@/lib/mockData';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { ArrowLeft, BarChart3, Download, FileText, Table, TrendingUp } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { getUser, getCurrentDate } from "@/lib/mockData";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  ArrowLeft,
+  BarChart3,
+  Download,
+  FileText,
+  Table,
+  TrendingUp,
+} from "lucide-react";
 
 interface ReportData {
   id: number;
@@ -26,33 +50,95 @@ export default function AdminReports() {
   const navigate = useNavigate();
   const [startDate, setStartDate] = useState(getCurrentDate());
   const [endDate, setEndDate] = useState(getCurrentDate());
-  const [selectedSection, setSelectedSection] = useState('all');
-  const [reportType, setReportType] = useState('');
+  const [selectedSection, setSelectedSection] = useState("all");
+  const [reportType, setReportType] = useState("");
   const [showReport, setShowReport] = useState(false);
   const [reportData, setReportData] = useState<ReportData[]>([]);
 
   useEffect(() => {
     const user = getUser();
-    if (!user || user.role !== 'admin') {
-      navigate('/');
+    if (!user || user.role !== "admin") {
+      navigate("/");
       return;
     }
   }, [navigate]);
 
   const mockReportData: ReportData[] = [
-    { id: 1, rollNo: 'CSE101', studentName: 'John Doe', section: '1', presentDays: 18, totalDays: 20, odDays: 1, leaveDays: 1, percentage: 90 },
-    { id: 2, rollNo: 'CSE102', studentName: 'Jane Smith', section: '1', presentDays: 19, totalDays: 20, odDays: 1, leaveDays: 0, percentage: 95 },
-    { id: 3, rollNo: 'CSE103', studentName: 'Bob Johnson', section: '2', presentDays: 16, totalDays: 20, odDays: 2, leaveDays: 2, percentage: 80 },
-    { id: 4, rollNo: 'CSE104', studentName: 'Alice Brown', section: '2', presentDays: 20, totalDays: 20, odDays: 0, leaveDays: 0, percentage: 100 },
-    { id: 5, rollNo: 'CSE105', studentName: 'Charlie Wilson', section: '3', presentDays: 17, totalDays: 20, odDays: 2, leaveDays: 1, percentage: 85 },
-    { id: 6, rollNo: 'CSE106', studentName: 'Diana Davis', section: '3', presentDays: 15, totalDays: 20, odDays: 1, leaveDays: 4, percentage: 75 },
+    {
+      id: 1,
+      rollNo: "CSE101",
+      studentName: "John Doe",
+      section: "1",
+      presentDays: 18,
+      totalDays: 20,
+      odDays: 1,
+      leaveDays: 1,
+      percentage: 90,
+    },
+    {
+      id: 2,
+      rollNo: "CSE102",
+      studentName: "Jane Smith",
+      section: "1",
+      presentDays: 19,
+      totalDays: 20,
+      odDays: 1,
+      leaveDays: 0,
+      percentage: 95,
+    },
+    {
+      id: 3,
+      rollNo: "CSE103",
+      studentName: "Bob Johnson",
+      section: "2",
+      presentDays: 16,
+      totalDays: 20,
+      odDays: 2,
+      leaveDays: 2,
+      percentage: 80,
+    },
+    {
+      id: 4,
+      rollNo: "CSE104",
+      studentName: "Alice Brown",
+      section: "2",
+      presentDays: 20,
+      totalDays: 20,
+      odDays: 0,
+      leaveDays: 0,
+      percentage: 100,
+    },
+    {
+      id: 5,
+      rollNo: "CSE105",
+      studentName: "Charlie Wilson",
+      section: "3",
+      presentDays: 17,
+      totalDays: 20,
+      odDays: 2,
+      leaveDays: 1,
+      percentage: 85,
+    },
+    {
+      id: 6,
+      rollNo: "CSE106",
+      studentName: "Diana Davis",
+      section: "3",
+      presentDays: 15,
+      totalDays: 20,
+      odDays: 1,
+      leaveDays: 4,
+      percentage: 75,
+    },
   ];
 
   const handleGenerateReport = () => {
     // Filter data based on selected section
     let filteredData = mockReportData;
-    if (selectedSection && selectedSection !== 'all') {
-      filteredData = mockReportData.filter(item => item.section === selectedSection);
+    if (selectedSection && selectedSection !== "all") {
+      filteredData = mockReportData.filter(
+        (item) => item.section === selectedSection,
+      );
     }
 
     setReportData(filteredData);
@@ -66,53 +152,96 @@ export default function AdminReports() {
 
   const getAttendanceChartData = () => {
     if (!reportData.length) return null;
-    
-    const sections = [...new Set(reportData.map(item => item.section))];
-    return sections.map(section => {
-      const sectionData = reportData.filter(item => item.section === section);
-      const avgPercentage = sectionData.reduce((sum, item) => sum + item.percentage, 0) / sectionData.length;
+
+    const sections = [...new Set(reportData.map((item) => item.section))];
+    return sections.map((section) => {
+      const sectionData = reportData.filter((item) => item.section === section);
+      const avgPercentage =
+        sectionData.reduce((sum, item) => sum + item.percentage, 0) /
+        sectionData.length;
       return { section, percentage: Math.round(avgPercentage) };
     });
   };
 
   const getStatusData = () => {
     if (!reportData.length) return null;
-    
-    const totalPresent = reportData.reduce((sum, item) => sum + item.presentDays, 0);
+
+    const totalPresent = reportData.reduce(
+      (sum, item) => sum + item.presentDays,
+      0,
+    );
     const totalOD = reportData.reduce((sum, item) => sum + item.odDays, 0);
-    const totalLeave = reportData.reduce((sum, item) => sum + item.leaveDays, 0);
+    const totalLeave = reportData.reduce(
+      (sum, item) => sum + item.leaveDays,
+      0,
+    );
     const total = totalPresent + totalOD + totalLeave;
-    
+
     return [
-      { label: 'Present', value: totalPresent, percentage: Math.round((totalPresent / total) * 100), color: 'bg-green-500' },
-      { label: 'OD', value: totalOD, percentage: Math.round((totalOD / total) * 100), color: 'bg-blue-500' },
-      { label: 'Leave', value: totalLeave, percentage: Math.round((totalLeave / total) * 100), color: 'bg-red-500' },
+      {
+        label: "Present",
+        value: totalPresent,
+        percentage: Math.round((totalPresent / total) * 100),
+        color: "bg-green-500",
+      },
+      {
+        label: "OD",
+        value: totalOD,
+        percentage: Math.round((totalOD / total) * 100),
+        color: "bg-blue-500",
+      },
+      {
+        label: "Leave",
+        value: totalLeave,
+        percentage: Math.round((totalLeave / total) * 100),
+        color: "bg-red-500",
+      },
     ];
   };
 
   const getReportColumns = () => {
     switch (reportType) {
-      case 'attendance-summary':
-        return ['Roll No', 'Student Name', 'Section', 'Present Days', 'Total Days', 'Percentage'];
-      case 'od-report':
-        return ['Roll No', 'Student Name', 'Section', 'OD Days', 'Total Days'];
-      case 'absentee-list':
-        return ['Roll No', 'Student Name', 'Section', 'Leave Days', 'Percentage'];
+      case "attendance-summary":
+        return [
+          "Roll No",
+          "Student Name",
+          "Section",
+          "Present Days",
+          "Total Days",
+          "Percentage",
+        ];
+      case "od-report":
+        return ["Roll No", "Student Name", "Section", "OD Days", "Total Days"];
+      case "absentee-list":
+        return [
+          "Roll No",
+          "Student Name",
+          "Section",
+          "Leave Days",
+          "Percentage",
+        ];
       default:
-        return ['Roll No', 'Student Name', 'Section', 'Present Days', 'Total Days', 'Percentage'];
+        return [
+          "Roll No",
+          "Student Name",
+          "Section",
+          "Present Days",
+          "Total Days",
+          "Percentage",
+        ];
     }
   };
 
   const getReportTitle = () => {
     switch (reportType) {
-      case 'attendance-summary':
-        return 'Attendance Summary Report';
-      case 'od-report':
-        return 'Official Duty (OD) Report';
-      case 'absentee-list':
-        return 'Absentee List Report';
+      case "attendance-summary":
+        return "Attendance Summary Report";
+      case "od-report":
+        return "Official Duty (OD) Report";
+      case "absentee-list":
+        return "Absentee List Report";
       default:
-        return 'Attendance Report';
+        return "Attendance Report";
     }
   };
 
@@ -125,8 +254,8 @@ export default function AdminReports() {
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center h-16">
-            <Link 
-              to="/admin" 
+            <Link
+              to="/admin"
               className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
             >
               <ArrowLeft className="h-4 w-4" />
@@ -142,14 +271,18 @@ export default function AdminReports() {
           {/* Page Header */}
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Reports</h1>
-            <p className="text-gray-600 mt-1">Generate attendance and academic reports</p>
+            <p className="text-gray-600 mt-1">
+              Generate attendance and academic reports
+            </p>
           </div>
 
           {/* Filters */}
           <Card>
             <CardHeader>
               <CardTitle className="text-lg">Report Filters</CardTitle>
-              <CardDescription>Select parameters to generate your report</CardDescription>
+              <CardDescription>
+                Select parameters to generate your report
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -173,7 +306,10 @@ export default function AdminReports() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="section">Section</Label>
-                  <Select value={selectedSection} onValueChange={setSelectedSection}>
+                  <Select
+                    value={selectedSection}
+                    onValueChange={setSelectedSection}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="All Sections" />
                     </SelectTrigger>
@@ -192,16 +328,20 @@ export default function AdminReports() {
                       <SelectValue placeholder="Select Report Type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="attendance-summary">Attendance Summary</SelectItem>
+                      <SelectItem value="attendance-summary">
+                        Attendance Summary
+                      </SelectItem>
                       <SelectItem value="od-report">OD Report</SelectItem>
-                      <SelectItem value="absentee-list">Absentee List</SelectItem>
+                      <SelectItem value="absentee-list">
+                        Absentee List
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
-              
+
               <div className="flex gap-4 pt-4">
-                <Button 
+                <Button
                   onClick={handleGenerateReport}
                   disabled={!reportType}
                   className="flex items-center gap-2"
@@ -209,25 +349,28 @@ export default function AdminReports() {
                   <BarChart3 className="h-4 w-4" />
                   Generate Report
                 </Button>
-                
+
                 {showReport && (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        className="flex items-center gap-2"
+                      >
                         <Download className="h-4 w-4" />
                         Export
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                      <DropdownMenuItem onClick={() => handleExport('PDF')}>
+                      <DropdownMenuItem onClick={() => handleExport("PDF")}>
                         <FileText className="h-4 w-4 mr-2" />
                         Export as PDF
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleExport('Excel')}>
+                      <DropdownMenuItem onClick={() => handleExport("Excel")}>
                         <Table className="h-4 w-4 mr-2" />
                         Export as Excel
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleExport('CSV')}>
+                      <DropdownMenuItem onClick={() => handleExport("CSV")}>
                         <TrendingUp className="h-4 w-4 mr-2" />
                         Export as CSV
                       </DropdownMenuItem>
@@ -246,7 +389,9 @@ export default function AdminReports() {
                 <Card>
                   <CardContent className="pt-6">
                     <div className="text-center">
-                      <p className="text-2xl font-bold text-blue-600">{reportData.length}</p>
+                      <p className="text-2xl font-bold text-blue-600">
+                        {reportData.length}
+                      </p>
                       <p className="text-sm text-gray-600">Total Students</p>
                     </div>
                   </CardContent>
@@ -255,9 +400,17 @@ export default function AdminReports() {
                   <CardContent className="pt-6">
                     <div className="text-center">
                       <p className="text-2xl font-bold text-green-600">
-                        {Math.round(reportData.reduce((sum, item) => sum + item.percentage, 0) / reportData.length)}%
+                        {Math.round(
+                          reportData.reduce(
+                            (sum, item) => sum + item.percentage,
+                            0,
+                          ) / reportData.length,
+                        )}
+                        %
                       </p>
-                      <p className="text-sm text-gray-600">Average Attendance</p>
+                      <p className="text-sm text-gray-600">
+                        Average Attendance
+                      </p>
                     </div>
                   </CardContent>
                 </Card>
@@ -265,7 +418,8 @@ export default function AdminReports() {
                   <CardContent className="pt-6">
                     <div className="text-center">
                       <p className="text-2xl font-bold text-purple-600">
-                        {new Date(startDate).toLocaleDateString()} - {new Date(endDate).toLocaleDateString()}
+                        {new Date(startDate).toLocaleDateString()} -{" "}
+                        {new Date(endDate).toLocaleDateString()}
                       </p>
                       <p className="text-sm text-gray-600">Date Range</p>
                     </div>
@@ -279,7 +433,9 @@ export default function AdminReports() {
                 {chartData && (
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg">Section-wise Attendance</CardTitle>
+                      <CardTitle className="text-lg">
+                        Section-wise Attendance
+                      </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
@@ -287,7 +443,9 @@ export default function AdminReports() {
                           <div key={index} className="space-y-2">
                             <div className="flex justify-between text-sm">
                               <span>Section {item.section}</span>
-                              <span className="font-medium">{item.percentage}%</span>
+                              <span className="font-medium">
+                                {item.percentage}%
+                              </span>
                             </div>
                             <div className="w-full bg-gray-200 rounded-full h-2">
                               <div
@@ -306,19 +464,32 @@ export default function AdminReports() {
                 {statusData && (
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg">Attendance Distribution</CardTitle>
+                      <CardTitle className="text-lg">
+                        Attendance Distribution
+                      </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
                         {statusData.map((item, index) => (
-                          <div key={index} className="flex items-center justify-between">
+                          <div
+                            key={index}
+                            className="flex items-center justify-between"
+                          >
                             <div className="flex items-center gap-3">
-                              <div className={`w-4 h-4 rounded ${item.color}`} />
-                              <span className="text-sm font-medium">{item.label}</span>
+                              <div
+                                className={`w-4 h-4 rounded ${item.color}`}
+                              />
+                              <span className="text-sm font-medium">
+                                {item.label}
+                              </span>
                             </div>
                             <div className="text-right">
-                              <span className="text-sm font-bold">{item.value}</span>
-                              <span className="text-xs text-gray-500 ml-1">({item.percentage}%)</span>
+                              <span className="text-sm font-bold">
+                                {item.value}
+                              </span>
+                              <span className="text-xs text-gray-500 ml-1">
+                                ({item.percentage}%)
+                              </span>
                             </div>
                           </div>
                         ))}
@@ -333,7 +504,8 @@ export default function AdminReports() {
                 <CardHeader>
                   <CardTitle className="text-lg">{getReportTitle()}</CardTitle>
                   <CardDescription>
-                    Detailed {reportType?.replace('-', ' ')} data for the selected period
+                    Detailed {reportType?.replace("-", " ")} data for the
+                    selected period
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
@@ -342,7 +514,10 @@ export default function AdminReports() {
                       <thead className="bg-gray-50">
                         <tr>
                           {getReportColumns().map((column, index) => (
-                            <th key={index} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th
+                              key={index}
+                              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            >
                               {column}
                             </th>
                           ))}
@@ -360,7 +535,7 @@ export default function AdminReports() {
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                               {item.section}
                             </td>
-                            {reportType === 'attendance-summary' && (
+                            {reportType === "attendance-summary" && (
                               <>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                   {item.presentDays}
@@ -369,13 +544,19 @@ export default function AdminReports() {
                                   {item.totalDays}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                  <Badge variant={item.percentage >= 75 ? 'default' : 'destructive'}>
+                                  <Badge
+                                    variant={
+                                      item.percentage >= 75
+                                        ? "default"
+                                        : "destructive"
+                                    }
+                                  >
                                     {item.percentage}%
                                   </Badge>
                                 </td>
                               </>
                             )}
-                            {reportType === 'od-report' && (
+                            {reportType === "od-report" && (
                               <>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                   {item.odDays}
@@ -385,13 +566,19 @@ export default function AdminReports() {
                                 </td>
                               </>
                             )}
-                            {reportType === 'absentee-list' && (
+                            {reportType === "absentee-list" && (
                               <>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                   {item.leaveDays}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                  <Badge variant={item.percentage >= 75 ? 'default' : 'destructive'}>
+                                  <Badge
+                                    variant={
+                                      item.percentage >= 75
+                                        ? "default"
+                                        : "destructive"
+                                    }
+                                  >
                                     {item.percentage}%
                                   </Badge>
                                 </td>
@@ -413,12 +600,16 @@ export default function AdminReports() {
               <CardContent className="py-12">
                 <div className="text-center">
                   <BarChart3 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Generate Your First Report</h3>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    Generate Your First Report
+                  </h3>
                   <p className="text-gray-600 mb-4">
-                    Select your filters above and click "Generate Report" to view attendance data, charts, and analytics.
+                    Select your filters above and click "Generate Report" to
+                    view attendance data, charts, and analytics.
                   </p>
                   <p className="text-sm text-gray-500">
-                    You can export reports in PDF, Excel, or CSV format once generated.
+                    You can export reports in PDF, Excel, or CSV format once
+                    generated.
                   </p>
                 </div>
               </CardContent>

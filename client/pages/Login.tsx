@@ -1,29 +1,41 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { mockStaff, mockAdmins, saveUser, type User } from '@/lib/mockData';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { mockStaff, mockAdmins, saveUser, type User } from "@/lib/mockData";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function Login() {
-  const [role, setRole] = useState<'Staff' | 'Admin' | ''>('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [role, setRole] = useState<"Staff" | "Admin" | "">("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setIsLoading(true);
 
     // Validate fields
     if (!role || !username || !password) {
-      setError('All fields are required');
+      setError("All fields are required");
       setIsLoading(false);
       return;
     }
@@ -31,30 +43,36 @@ export default function Login() {
     try {
       let user: User | null = null;
 
-      if (role === 'Staff') {
-        const staff = mockStaff.find(s => s.username === username && s.password === password);
+      if (role === "Staff") {
+        const staff = mockStaff.find(
+          (s) => s.username === username && s.password === password,
+        );
         if (staff) {
-          user = { role: 'staff', id: staff.id };
+          user = { role: "staff", id: staff.id };
         }
-      } else if (role === 'Admin') {
-        const admin = mockAdmins.find(a => a.username === username && a.password === password);
+      } else if (role === "Admin") {
+        const admin = mockAdmins.find(
+          (a) => a.username === username && a.password === password,
+        );
         if (admin) {
-          user = { role: 'admin', id: admin.id };
+          user = { role: "admin", id: admin.id };
         }
       }
 
       if (user) {
         saveUser(user);
-        if (user.role === 'staff') {
-          navigate('/staff');
+        if (user.role === "staff") {
+          navigate("/staff");
         } else {
-          navigate('/admin');
+          navigate("/admin");
         }
       } else {
-        setError('Invalid credentials. Please check your username and password.');
+        setError(
+          "Invalid credentials. Please check your username and password.",
+        );
       }
     } catch (err) {
-      setError('An error occurred during login. Please try again.');
+      setError("An error occurred during login. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -76,7 +94,10 @@ export default function Login() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="role">Role</Label>
-                <Select value={role} onValueChange={(value: 'Staff' | 'Admin') => setRole(value)}>
+                <Select
+                  value={role}
+                  onValueChange={(value: "Staff" | "Admin") => setRole(value)}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select your role" />
                   </SelectTrigger>
@@ -119,12 +140,8 @@ export default function Login() {
                 </Alert>
               )}
 
-              <Button 
-                type="submit" 
-                className="w-full" 
-                disabled={isLoading}
-              >
-                {isLoading ? 'Signing in...' : 'Login'}
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? "Signing in..." : "Login"}
               </Button>
             </form>
 
@@ -132,16 +149,22 @@ export default function Login() {
               <div className="text-sm text-gray-600">
                 <p className="font-medium mb-2">Demo Credentials:</p>
                 <div className="space-y-1 text-xs">
-                  <p><strong>Staff:</strong> staff1 / pass</p>
-                  <p><strong>Admin:</strong> admin / adminpass</p>
+                  <p>
+                    <strong>Staff:</strong> staff1 / pass
+                  </p>
+                  <p>
+                    <strong>Admin:</strong> admin / adminpass
+                  </p>
                 </div>
               </div>
-              
+
               <div className="text-center">
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className="text-sm text-blue-600 hover:text-blue-800 underline"
-                  onClick={() => alert('Demo system - password reset not available')}
+                  onClick={() =>
+                    alert("Demo system - password reset not available")
+                  }
                 >
                   Forgot password?
                 </button>

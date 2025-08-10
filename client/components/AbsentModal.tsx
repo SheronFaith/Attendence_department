@@ -34,6 +34,7 @@ export function AbsentModal({ open, onClose, onSelect, studentName }: AbsentModa
 
   const handleSelect = (type: 'OD' | 'Leave') => {
     onSelect(type);
+    onClose();
   };
 
   if (!open) return null;

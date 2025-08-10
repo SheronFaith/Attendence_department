@@ -19,6 +19,19 @@ export function AbsentModal({ open, onClose, onSelect, studentName }: AbsentModa
     }
   }, [open]);
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && open) {
+        onClose();
+      }
+    };
+
+    if (open) {
+      document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [open, onClose]);
+
   const handleSelect = (type: 'OD' | 'Leave') => {
     onSelect(type);
     onClose();

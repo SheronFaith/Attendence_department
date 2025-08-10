@@ -198,12 +198,14 @@ export default function StaffAttendance() {
                   <CardTitle className="text-xl">
                     {course.courseName} ({course.courseCode})
                   </CardTitle>
-                  <CardDescription className="flex items-center gap-4 mt-2">
-                    <span>{course.courseType} • Section {course.section} • Year {course.year}</span>
+                  <div className="flex items-center gap-4 mt-2">
+                    <CardDescription>
+                      {course.courseType} • Section {course.section} • Year {course.year}
+                    </CardDescription>
                     <Badge variant={course.courseType === 'Elective' ? 'default' : 'secondary'}>
                       {course.courseType}
                     </Badge>
-                  </CardDescription>
+                  </div>
                 </div>
                 <div className="flex gap-4 text-sm text-gray-600">
                   <div className="flex items-center gap-1">
@@ -338,20 +340,27 @@ export default function StaffAttendance() {
                             </Badge>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm">
-                            <button
-                              type="button"
-                              onClick={(e) => handleToggle(student, e.currentTarget)}
-                              className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md p-1"
+                            <div
+                              role="button"
+                              tabIndex={0}
+                              onClick={(e) => handleToggle(student, e.currentTarget as HTMLButtonElement)}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                  e.preventDefault();
+                                  handleToggle(student, e.currentTarget as HTMLButtonElement);
+                                }
+                              }}
+                              className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md p-1 cursor-pointer"
                               aria-label={`Toggle attendance for ${student.studentName}. Currently ${student.status}`}
                             >
-                              <Switch 
+                              <Switch
                                 checked={student.status === 'Present'}
                                 aria-hidden="true"
                               />
                               <span className="text-xs text-gray-500">
                                 {student.status === 'Present' ? 'Present' : 'Absent'}
                               </span>
-                            </button>
+                            </div>
                           </td>
                         </tr>
                       ))}

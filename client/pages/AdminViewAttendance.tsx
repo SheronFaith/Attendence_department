@@ -56,7 +56,7 @@ export default function AdminViewAttendance() {
       record.entries.forEach(entry => {
         entries.push({
           ...entry,
-          section: 'A', // Mock section data - in real app this would come from student data
+          section: '1', // Mock section data - in real app this would come from student data
           courseName: record.courseName
         });
       });

@@ -29,6 +29,7 @@ export default function StaffAttendance() {
   const navigate = useNavigate();
   const [course, setCourse] = useState<Course | null>(null);
   const [students, setStudents] = useState<StudentAttendance[]>([]);
+  const [forceUpdate, setForceUpdate] = useState(0);
   const [date, setDate] = useState(getCurrentDate());
   const [periodFrom, setPeriodFrom] = useState(1);
   const [periodTo, setPeriodTo] = useState(1);

@@ -65,25 +65,25 @@ export const mockAdmins: Admin[] = [
 ];
 
 export const mockCourses: Course[] = [
-  { 
-    id: 1, 
-    courseName: "AI in Agriculture", 
-    courseCode: "AI3021", 
-    courseBatch: "BATCH-A", 
-    courseType: "Elective", 
-    section: "B", 
-    year: 4, 
-    staffId: 101 
+  {
+    id: 1,
+    courseName: "AI in Agriculture",
+    courseCode: "AI3021",
+    courseBatch: "BATCH-A",
+    courseType: "Elective",
+    section: "2",
+    year: 4,
+    staffId: 101
   },
-  { 
-    id: 2, 
-    courseName: "Mathematics II", 
-    courseCode: "MTH101", 
-    courseBatch: "COMMON-1", 
-    courseType: "Common", 
-    section: "A", 
-    year: 2, 
-    staffId: 101 
+  {
+    id: 2,
+    courseName: "Mathematics II",
+    courseCode: "MTH101",
+    courseBatch: "COMMON-1",
+    courseType: "Common",
+    section: "1",
+    year: 2,
+    staffId: 101
   }
 ];
 

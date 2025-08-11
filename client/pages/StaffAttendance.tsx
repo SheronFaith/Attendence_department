@@ -61,122 +61,74 @@ export default function StaffAttendance() {
     }
 
     const fetchStudents = async () => {
-      try {
-        const apiUrl = `https://department-attendance-backend-production.up.railway.app/api/students?courseId=${courseId}&batchId=${batchId}`;
-        console.log("🚀 [STUDENTS API] Fetching students from:", apiUrl);
-        console.log("📊 [PARAMS] CourseId:", courseId, "BatchId:", batchId);
+      // Check if we're in a restricted environment (cloud demo)
+      const isCloudEnvironment = window.location.hostname.includes('fly.dev') ||
+                                 window.location.hostname.includes('netlify') ||
+                                 window.location.hostname.includes('vercel');
 
-        // Try different fetch strategies
-        const fetchOptions = [
-          // Strategy 1: Basic fetch with minimal headers
-          {
-            method: 'GET',
-          },
-          // Strategy 2: Fetch with standard headers
-          {
+      if (isCloudEnvironment) {
+        console.log("🌐 [CLOUD ENVIRONMENT] Using simulated student data for demo");
+
+        // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 300));
+      } else {
+        try {
+          const apiUrl = `https://department-attendance-backend-production.up.railway.app/api/students?courseId=${courseId}&batchId=${batchId}`;
+          console.log("🚀 [STUDENTS API] Fetching students from:", apiUrl);
+          console.log("📊 [PARAMS] CourseId:", courseId, "BatchId:", batchId);
+
+          const response = await fetch(apiUrl, {
             method: 'GET',
             headers: {
               'Accept': 'application/json',
             },
-          },
-          // Strategy 3: Fetch with CORS mode
-          {
-            method: 'GET',
-            mode: 'cors' as RequestMode,
-            headers: {
-              'Accept': 'application/json',
-            },
-          }
-        ];
+          });
 
-        let response;
-        let lastError;
+          if (response.ok) {
+            const studentsData = await response.json();
+            console.log("✅ [STUDENTS SUCCESS] Raw API data received:", studentsData);
 
-        for (let i = 0; i < fetchOptions.length; i++) {
-          try {
-            console.log(`🔄 [STUDENTS STRATEGY ${i + 1}] Trying fetch strategy ${i + 1}`);
-            response = await fetch(apiUrl, fetchOptions[i]);
-            console.log(`📡 [STUDENTS STRATEGY ${i + 1}] Status:`, response.status, response.statusText);
+            // Transform API data to component format
+            const transformedStudents = studentsData.map((student: any) => ({
+              id: student.id,
+              studentName: student.name,
+              studentRollNo: student.rollNumber,
+              courseBatch: student.batch?.batchNo?.toString() || "",
+              studentSection: student.section,
+              status: "Present" as const,
+            }));
 
-            if (response.ok) {
-              break; // Success, exit the loop
-            } else {
-              console.log(`⚠️ [STUDENTS STRATEGY ${i + 1}] Failed with status:`, response.status);
+            // Set course info from first student's data
+            if (studentsData.length > 0) {
+              const firstStudent = studentsData[0];
+              const courseInfo = {
+                id: parseInt(courseId),
+                courseName: firstStudent.course.courseName,
+                courseCode: firstStudent.course.courseCode.toString(),
+                courseBatch: firstStudent.batch?.batchNo?.toString() || "",
+                courseType: "Course" as const,
+                section: firstStudent.batch?.batchNo?.toString() || "",
+                year: parseInt(firstStudent.semester),
+                staffId: user.id,
+              };
+
+              setCourse(courseInfo);
             }
-          } catch (strategyError) {
-            console.log(`❌ [STUDENTS STRATEGY ${i + 1}] Error:`, strategyError);
-            lastError = strategyError;
-            continue; // Try next strategy
+
+            setStudents(transformedStudents);
+            console.log("💾 [UI UPDATE] Using live API data");
+            return;
+          } else {
+            console.warn("⚠️ [STUDENTS ERROR] Response not OK:", response.status);
+            throw new Error(`API responded with status ${response.status}`);
           }
-        }
-
-        if (response && response.ok) {
-          console.log("📡 [STUDENTS RESPONSE] Headers:", Object.fromEntries(response.headers.entries()));
-          const studentsData = await response.json();
-          console.log(
-            "✅ [STUDENTS SUCCESS] Raw API data received:",
-            studentsData,
-          );
-          console.log(
-            "👥 [STUDENTS COUNT] Number of students:",
-            studentsData.length,
-          );
-
-          // Transform API data to component format
-          const transformedStudents = studentsData.map((student: any) => ({
-            id: student.id,
-            studentName: student.name,
-            studentRollNo: student.rollNumber,
-            courseBatch: student.batch?.batchNo?.toString() || "",
-            studentSection: student.section,
-            status: "Present" as const,
-          }));
-
-          console.log(
-            "🔄 [DATA TRANSFORM] Transformed students data:",
-            transformedStudents,
-          );
-
-          // Set course info from first student's data
-          if (studentsData.length > 0) {
-            const firstStudent = studentsData[0];
-            const courseInfo = {
-              id: parseInt(courseId),
-              courseName: firstStudent.course.courseName,
-              courseCode: firstStudent.course.courseCode.toString(),
-              courseBatch: firstStudent.batch?.batchNo?.toString() || "",
-              courseType: "Course" as const,
-              section: firstStudent.batch?.batchNo?.toString() || "",
-              year: parseInt(firstStudent.semester),
-              staffId: user.id,
-            };
-
-            console.log("📚 [COURSE INFO] Extracted course data:", courseInfo);
-            setCourse(courseInfo);
-          }
-
-          setStudents(transformedStudents);
-          console.log(
-            "💾 [UI UPDATE] Students data set to state, using live API data",
-          );
-          return;
-        } else {
-          throw lastError || new Error('All students fetch strategies failed');
-        }
-      } catch (error) {
-        console.error("❌ [STUDENTS FETCH ERROR] All strategies failed:", error);
-        console.log("🔄 [FALLBACK] Switching to demo students data");
-
-        // Log more details about the error
-        if (error instanceof Error) {
-          console.log("❌ [ERROR DETAILS] Name:", error.name);
-          console.log("❌ [ERROR DETAILS] Message:", error.message);
-          console.log("❌ [ERROR DETAILS] Stack:", error.stack);
+        } catch (error) {
+          console.warn("❌ [STUDENTS FETCH ERROR] Falling back to demo data:", error);
         }
       }
 
       // Fallback to mock students when API is not available
-      console.log("🎭 [STUDENTS FALLBACK] Using demo/mock student data");
+      console.log("🎭 [DEMO MODE] Using simulated student data");
       const fallbackStudents = [
         {
           id: 1,
@@ -222,12 +174,8 @@ export default function StaffAttendance() {
       setCourse(fallbackCourse);
       setStudents(fallbackStudents);
 
-      console.log("📚 [FALLBACK COURSE] Demo course info:", fallbackCourse);
-      console.log(
-        "👥 [FALLBACK STUDENTS] Demo students loaded:",
-        fallbackStudents,
-      );
-      console.log("💾 [UI UPDATE] Demo data set to state");
+      console.log("📚 [DEMO COURSE] Course info:", fallbackCourse);
+      console.log("👥 [DEMO STUDENTS] Students loaded:", fallbackStudents);
     };
 
     fetchStudents();

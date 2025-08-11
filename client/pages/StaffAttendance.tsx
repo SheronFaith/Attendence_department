@@ -223,21 +223,49 @@ export default function StaffAttendance() {
         attendanceList
       };
 
-      // Submit to API
-      const response = await fetch('http://localhost:8080/attendance/mark', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(attendanceData)
-      });
+      // Try to submit to API first
+      try {
+        const response = await fetch('http://localhost:8080/attendance/mark', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(attendanceData)
+        });
 
-      if (response.ok) {
-        showToast("Attendance saved successfully!");
-        navigate("/staff");
-      } else {
-        throw new Error('Failed to save attendance');
+        if (response.ok) {
+          showToast("Attendance saved successfully!");
+          navigate("/staff");
+          return;
+        }
+      } catch (apiError) {
+        console.warn('API not available, saving locally:', apiError);
       }
+
+      // Fallback to localStorage when API is not available
+      const localAttendanceRecord = {
+        id: Date.now(),
+        courseId: parseInt(courseId!),
+        batchId: parseInt(batchId!),
+        courseName: course?.courseName || 'Unknown Course',
+        date,
+        periodFrom,
+        periodTo,
+        entries: students.map(student => ({
+          studentId: student.id,
+          studentRollNo: student.studentRollNo,
+          studentName: student.studentName,
+          status: student.status
+        }))
+      };
+
+      // Save to localStorage as fallback
+      const existingRecords = JSON.parse(localStorage.getItem('attendance_records') || '[]');
+      existingRecords.push(localAttendanceRecord);
+      localStorage.setItem('attendance_records', JSON.stringify(existingRecords));
+
+      showToast("Attendance saved locally (API unavailable)");
+      navigate("/staff");
     } catch (error) {
       console.error('Error saving attendance:', error);
       showToast('Failed to save attendance. Please try again.', 5000);

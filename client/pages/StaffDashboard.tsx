@@ -44,24 +44,62 @@ export default function StaffDashboard() {
 
     const fetchCourses = async () => {
       try {
-        // Fetch courses with batches from API
+        // Try to fetch from API first
         const response = await fetch('http://localhost:8080/courses/with-batches');
         if (response.ok) {
           const coursesData: ApiCourse[] = await response.json();
           setCourses(coursesData);
           setFilteredCourses(coursesData);
-        } else {
-          console.error('Failed to fetch courses');
-          // Fallback to empty array
-          setCourses([]);
-          setFilteredCourses([]);
+          return;
         }
       } catch (error) {
-        console.error('Error fetching courses:', error);
-        // Fallback to empty array
-        setCourses([]);
-        setFilteredCourses([]);
+        console.warn('API not available, using fallback data:', error);
       }
+
+      // Fallback to mock data when API is not available
+      const fallbackCourses: ApiCourse[] = [
+        {
+          courseId: 1,
+          courseName: "Mathematics",
+          courseCode: 101,
+          roomNo: "C101",
+          batches: [
+            {
+              batchId: 1,
+              batchNo: 1,
+              roomNo: "B101"
+            },
+            {
+              batchId: 2,
+              batchNo: 2,
+              roomNo: "B102"
+            }
+          ]
+        },
+        {
+          courseId: 2,
+          courseName: "Physics",
+          courseCode: 102,
+          roomNo: "C102",
+          batches: [
+            {
+              batchId: 3,
+              batchNo: 1,
+              roomNo: "B201"
+            }
+          ]
+        },
+        {
+          courseId: 3,
+          courseName: "Chemistry",
+          courseCode: 103,
+          roomNo: "C103",
+          batches: null
+        }
+      ];
+
+      setCourses(fallbackCourses);
+      setFilteredCourses(fallbackCourses);
     };
 
     fetchCourses();

@@ -101,7 +101,7 @@ export default function StaffAttendance() {
     };
 
     fetchStudents();
-  }, [courseId, navigate]);
+  }, [courseId, batchId, navigate]);
 
   const handleToggle = (
     student: StudentAttendance,

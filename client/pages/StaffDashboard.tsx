@@ -170,38 +170,61 @@ export default function StaffDashboard() {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {filteredCourses.map((course) => (
-                        <tr key={course.id} className="hover:bg-gray-50">
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                            {course.courseName}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">
-                            {course.courseCode}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <Badge
-                              variant={
-                                course.courseType === "Elective"
-                                  ? "default"
-                                  : "secondary"
-                              }
-                            >
-                              {course.courseType}
-                            </Badge>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {course.section}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {course.year}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <Link to={`/staff/attendance/${course.id}`}>
-                              <Button size="sm">Mark Attendance</Button>
-                            </Link>
-                          </td>
-                        </tr>
-                      ))}
+                      {filteredCourses.flatMap((course) =>
+                        course.batches && course.batches.length > 0
+                          ? course.batches.map((batch) => (
+                              <tr key={`${course.courseId}-${batch.batchId}`} className="hover:bg-gray-50">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                  {course.courseName}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">
+                                  {course.courseCode}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                  <Badge variant="secondary">
+                                    Course
+                                  </Badge>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                  Batch {batch.batchNo}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                  {batch.roomNo}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                  <Link to={`/staff/attendance/${course.courseId}/${batch.batchId}`}>
+                                    <Button size="sm">Mark Attendance</Button>
+                                  </Link>
+                                </td>
+                              </tr>
+                            ))
+                          : [
+                              <tr key={course.courseId} className="hover:bg-gray-50">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                  {course.courseName}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">
+                                  {course.courseCode}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                  <Badge variant="secondary">
+                                    Course
+                                  </Badge>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                  No Batches
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                  {course.roomNo}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                  <Button size="sm" disabled>
+                                    No Batches
+                                  </Button>
+                                </td>
+                              </tr>
+                            ]
+                      )}
                     </tbody>
                   </table>
                 </div>

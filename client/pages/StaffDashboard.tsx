@@ -33,6 +33,7 @@ export default function StaffDashboard() {
   const [filteredCourses, setFilteredCourses] = useState<ApiCourse[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [staffName, setStaffName] = useState("");
+  const [usingFallbackData, setUsingFallbackData] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {

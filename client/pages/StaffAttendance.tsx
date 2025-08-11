@@ -66,12 +66,19 @@ export default function StaffAttendance() {
         console.log("🚀 [STUDENTS API] Fetching students from:", apiUrl);
         console.log("📊 [PARAMS] CourseId:", courseId, "BatchId:", batchId);
 
-        const response = await fetch(apiUrl);
+        const response = await fetch(apiUrl, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
         console.log(
           "📡 [STUDENTS RESPONSE] Status:",
           response.status,
           response.statusText,
         );
+        console.log("📡 [STUDENTS RESPONSE] Headers:", Object.fromEntries(response.headers.entries()));
 
         if (response.ok) {
           const studentsData = await response.json();

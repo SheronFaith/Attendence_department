@@ -322,18 +322,22 @@ export default function StaffAttendance() {
           response.status,
           response.statusText,
         );
+        console.log("📡 [ATTENDANCE RESPONSE] Headers:", Object.fromEntries(response.headers.entries()));
 
         if (response.ok) {
           const responseData = await response.text();
-          console.log("�� [ATTENDANCE SUCCESS] Response data:", responseData);
+          console.log("✅ [ATTENDANCE SUCCESS] Response data:", responseData);
           showToast("Attendance saved successfully!");
           navigate("/staff");
           return;
         } else {
+          const errorText = await response.text();
           console.warn(
             "⚠️ [ATTENDANCE ERROR] Response not OK:",
             response.status,
             response.statusText,
+            "Body:",
+            errorText
           );
         }
       } catch (apiError) {

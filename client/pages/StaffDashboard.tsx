@@ -1,6 +1,21 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { mockCourses, getUser, clearUser, type Course } from "@/lib/mockData";
+import { getUser, clearUser } from "@/lib/mockData";
+
+// API interfaces
+interface ApiBatch {
+  batchId: number;
+  batchNo: number;
+  roomNo: string;
+}
+
+interface ApiCourse {
+  courseId: number;
+  courseName: string;
+  courseCode: number;
+  roomNo: string;
+  batches: ApiBatch[] | null;
+}
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {

@@ -45,21 +45,7 @@ export default function StaffDashboard() {
     }
 
     const fetchCourses = async () => {
-      try {
-        // Try to fetch from API first
-        const response = await fetch('http://localhost:8080/courses/with-batches');
-        if (response.ok) {
-          const coursesData: ApiCourse[] = await response.json();
-          setCourses(coursesData);
-          setFilteredCourses(coursesData);
-          setUsingFallbackData(false);
-          return;
-        }
-      } catch (error) {
-        console.warn('API not available, using fallback data:', error);
-      }
-
-      // Fallback to mock data when API is not available
+      // Always use fallback data in cloud environment where localhost isn't accessible
       setUsingFallbackData(true);
       const fallbackCourses: ApiCourse[] = [
         {

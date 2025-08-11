@@ -232,9 +232,7 @@ export default function StaffDashboard() {
                                   {course.courseCode}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                  <Badge variant="secondary">
-                                    Course
-                                  </Badge>
+                                  {course.staffName}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                   Batch {batch.batchNo}
@@ -258,9 +256,7 @@ export default function StaffDashboard() {
                                   {course.courseCode}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                  <Badge variant="secondary">
-                                    Course
-                                  </Badge>
+                                  {course.staffName}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                   No Batches

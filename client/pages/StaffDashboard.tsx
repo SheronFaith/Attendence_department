@@ -67,6 +67,7 @@ export default function StaffDashboard() {
           courseName: "Mathematics",
           courseCode: 101,
           roomNo: "C101",
+          staffName: "Dr. Sheron Faith",
           batches: [
             {
               batchId: 1,
@@ -85,6 +86,7 @@ export default function StaffDashboard() {
           courseName: "Physics",
           courseCode: 102,
           roomNo: "C102",
+          staffName: "Dr. John Smith",
           batches: [
             {
               batchId: 3,
@@ -98,6 +100,7 @@ export default function StaffDashboard() {
           courseName: "Chemistry",
           courseCode: 103,
           roomNo: "C103",
+          staffName: "Dr. Sarah Wilson",
           batches: null
         }
       ];

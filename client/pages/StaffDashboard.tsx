@@ -163,6 +163,13 @@ export default function StaffDashboard() {
               Select a course to mark attendance. Date will be auto-filled on
               the next screen.
             </p>
+            {usingFallbackData && (
+              <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+                <p className="text-sm text-yellow-800">
+                  ⚠️ Using demo data - API server not available. Connect to your backend API for live data.
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Search Box */}

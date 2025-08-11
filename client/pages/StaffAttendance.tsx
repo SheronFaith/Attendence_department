@@ -31,7 +31,7 @@ interface StudentAttendance extends Student {
 }
 
 export default function StaffAttendance() {
-  const { courseId } = useParams<{ courseId: string }>();
+  const { courseId, batchId } = useParams<{ courseId: string; batchId: string }>();
   const navigate = useNavigate();
   const [course, setCourse] = useState<Course | null>(null);
   const [students, setStudents] = useState<StudentAttendance[]>([]);

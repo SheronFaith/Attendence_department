@@ -45,27 +45,33 @@ export default function StaffDashboard() {
 
     const fetchCourses = async () => {
       // Check if we're in a restricted environment (cloud demo)
-      const isCloudEnvironment = window.location.hostname.includes('fly.dev') ||
-                                 window.location.hostname.includes('netlify') ||
-                                 window.location.hostname.includes('vercel');
+      const isCloudEnvironment =
+        window.location.hostname.includes("fly.dev") ||
+        window.location.hostname.includes("netlify") ||
+        window.location.hostname.includes("vercel");
 
       if (isCloudEnvironment) {
-        console.log("🌐 [CLOUD ENVIRONMENT] Detected cloud/demo environment - using simulated API data");
-        console.log("💡 [INFO] In production, this would connect to your Railway API");
+        console.log(
+          "🌐 [CLOUD ENVIRONMENT] Detected cloud/demo environment - using simulated API data",
+        );
+        console.log(
+          "💡 [INFO] In production, this would connect to your Railway API",
+        );
 
         // Simulate API delay for realistic experience
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
         setUsingFallbackData(true);
       } else {
         try {
-          const apiUrl = "https://department-attendance-backend-production.up.railway.app/courses/with-batches";
+          const apiUrl =
+            "https://department-attendance-backend-production.up.railway.app/courses/with-batches";
           console.log("🚀 [API CALL] Fetching courses from:", apiUrl);
 
           const response = await fetch(apiUrl, {
-            method: 'GET',
+            method: "GET",
             headers: {
-              'Accept': 'application/json',
+              Accept: "application/json",
             },
           });
 
@@ -83,7 +89,10 @@ export default function StaffDashboard() {
             throw new Error(`API responded with status ${response.status}`);
           }
         } catch (error) {
-          console.warn("❌ [API FETCH ERROR] Falling back to demo data:", error);
+          console.warn(
+            "❌ [API FETCH ERROR] Falling back to demo data:",
+            error,
+          );
           setUsingFallbackData(true);
         }
       }
@@ -199,7 +208,8 @@ export default function StaffDashboard() {
             {usingFallbackData && (
               <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-md">
                 <p className="text-sm text-blue-800">
-                  🌐 <strong>Demo Mode:</strong> Showing simulated data. In production, this connects to your Railway API backend.
+                  🌐 <strong>Demo Mode:</strong> Showing simulated data. In
+                  production, this connects to your Railway API backend.
                 </p>
               </div>
             )}

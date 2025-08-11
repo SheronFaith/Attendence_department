@@ -62,15 +62,18 @@ export default function StaffAttendance() {
 
     const fetchStudents = async () => {
       // Check if we're in a restricted environment (cloud demo)
-      const isCloudEnvironment = window.location.hostname.includes('fly.dev') ||
-                                 window.location.hostname.includes('netlify') ||
-                                 window.location.hostname.includes('vercel');
+      const isCloudEnvironment =
+        window.location.hostname.includes("fly.dev") ||
+        window.location.hostname.includes("netlify") ||
+        window.location.hostname.includes("vercel");
 
       if (isCloudEnvironment) {
-        console.log("🌐 [CLOUD ENVIRONMENT] Using simulated student data for demo");
+        console.log(
+          "🌐 [CLOUD ENVIRONMENT] Using simulated student data for demo",
+        );
 
         // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 300));
+        await new Promise((resolve) => setTimeout(resolve, 300));
       } else {
         try {
           const apiUrl = `https://department-attendance-backend-production.up.railway.app/api/students?courseId=${courseId}&batchId=${batchId}`;
@@ -78,15 +81,18 @@ export default function StaffAttendance() {
           console.log("📊 [PARAMS] CourseId:", courseId, "BatchId:", batchId);
 
           const response = await fetch(apiUrl, {
-            method: 'GET',
+            method: "GET",
             headers: {
-              'Accept': 'application/json',
+              Accept: "application/json",
             },
           });
 
           if (response.ok) {
             const studentsData = await response.json();
-            console.log("✅ [STUDENTS SUCCESS] Raw API data received:", studentsData);
+            console.log(
+              "✅ [STUDENTS SUCCESS] Raw API data received:",
+              studentsData,
+            );
 
             // Transform API data to component format
             const transformedStudents = studentsData.map((student: any) => ({
@@ -119,11 +125,17 @@ export default function StaffAttendance() {
             console.log("💾 [UI UPDATE] Using live API data");
             return;
           } else {
-            console.warn("⚠️ [STUDENTS ERROR] Response not OK:", response.status);
+            console.warn(
+              "⚠️ [STUDENTS ERROR] Response not OK:",
+              response.status,
+            );
             throw new Error(`API responded with status ${response.status}`);
           }
         } catch (error) {
-          console.warn("❌ [STUDENTS FETCH ERROR] Falling back to demo data:", error);
+          console.warn(
+            "❌ [STUDENTS FETCH ERROR] Falling back to demo data:",
+            error,
+          );
         }
       }
 
@@ -273,22 +285,27 @@ export default function StaffAttendance() {
       );
 
       // Check if we're in a restricted environment (cloud demo)
-      const isCloudEnvironment = window.location.hostname.includes('fly.dev') ||
-                                 window.location.hostname.includes('netlify') ||
-                                 window.location.hostname.includes('vercel');
+      const isCloudEnvironment =
+        window.location.hostname.includes("fly.dev") ||
+        window.location.hostname.includes("netlify") ||
+        window.location.hostname.includes("vercel");
 
       if (!isCloudEnvironment) {
         // Try to submit to API first (only in non-cloud environments)
         try {
-          const apiUrl = "https://department-attendance-backend-production.up.railway.app/attendance/mark";
+          const apiUrl =
+            "https://department-attendance-backend-production.up.railway.app/attendance/mark";
           console.log("🚀 [ATTENDANCE API] Submitting to:", apiUrl);
-          console.log("📤 [REQUEST BODY]:", JSON.stringify(attendanceData, null, 2));
+          console.log(
+            "📤 [REQUEST BODY]:",
+            JSON.stringify(attendanceData, null, 2),
+          );
 
           const response = await fetch(apiUrl, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "Accept": "application/json",
+              Accept: "application/json",
             },
             body: JSON.stringify(attendanceData),
           });
@@ -300,17 +317,23 @@ export default function StaffAttendance() {
             navigate("/staff");
             return;
           } else {
-            console.warn("⚠️ [ATTENDANCE ERROR] Response not OK:", response.status);
+            console.warn(
+              "⚠️ [ATTENDANCE ERROR] Response not OK:",
+              response.status,
+            );
             throw new Error(`API responded with status ${response.status}`);
           }
         } catch (apiError) {
-          console.warn("❌ [ATTENDANCE API ERROR] Falling back to local storage:", apiError);
+          console.warn(
+            "❌ [ATTENDANCE API ERROR] Falling back to local storage:",
+            apiError,
+          );
         }
       } else {
         console.log("🌐 [CLOUD ENVIRONMENT] Simulating attendance submission");
 
         // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
       }
 
       // Fallback to localStorage when API is not available
@@ -353,7 +376,10 @@ export default function StaffAttendance() {
       );
 
       console.log("✅ [LOCAL STORAGE SUCCESS] Attendance saved locally");
-      console.log("📊 [TOTAL RECORDS] New total records count:", existingRecords.length);
+      console.log(
+        "📊 [TOTAL RECORDS] New total records count:",
+        existingRecords.length,
+      );
 
       if (isCloudEnvironment) {
         showToast("✅ Attendance saved successfully! (Demo Mode)");

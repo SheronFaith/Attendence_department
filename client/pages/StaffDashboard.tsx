@@ -45,17 +45,28 @@ export default function StaffDashboard() {
 
     const fetchCourses = async () => {
       try {
-        // Try to fetch from your API first
-        const response = await fetch('http://localhost:8080/courses/with-batches');
+        const apiUrl = 'http://localhost:8080/courses/with-batches';
+        console.log('🚀 [API CALL] Fetching courses from:', apiUrl);
+
+        const response = await fetch(apiUrl);
+        console.log('📡 [API RESPONSE] Status:', response.status, response.statusText);
+
         if (response.ok) {
           const coursesData: ApiCourse[] = await response.json();
+          console.log('✅ [API SUCCESS] Courses data received:', coursesData);
+          console.log('📊 [API DATA] Number of courses:', coursesData.length);
+
           setCourses(coursesData);
           setFilteredCourses(coursesData);
           setUsingFallbackData(false);
+          console.log('💾 [UI UPDATE] Courses data set to state, using live API data');
           return;
+        } else {
+          console.warn('⚠️ [API ERROR] Response not OK:', response.status, response.statusText);
         }
       } catch (error) {
-        console.warn('API not available, using fallback data:', error);
+        console.error('❌ [API FETCH ERROR] API not available:', error);
+        console.log('🔄 [FALLBACK] Switching to demo data');
       }
 
       // Fallback to mock data when API is not available

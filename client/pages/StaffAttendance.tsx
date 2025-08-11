@@ -62,7 +62,7 @@ export default function StaffAttendance() {
 
     const fetchStudents = async () => {
       try {
-        const apiUrl = `http://localhost:8080/api/students?courseId=${courseId}&batchId=${batchId}`;
+        const apiUrl = `https://department-attendance-backend-production.up.railway.app/api/students?courseId=${courseId}&batchId=${batchId}`;
         console.log("🚀 [STUDENTS API] Fetching students from:", apiUrl);
         console.log("📊 [PARAMS] CourseId:", courseId, "BatchId:", batchId);
 
@@ -285,7 +285,7 @@ export default function StaffAttendance() {
 
       // Try to submit to API first
       try {
-        const apiUrl = "http://localhost:8080/attendance/mark";
+        const apiUrl = "https://department-attendance-backend-production.up.railway.app/attendance/mark";
         console.log("🚀 [ATTENDANCE API] Submitting to:", apiUrl);
         console.log(
           "📤 [REQUEST BODY]:",

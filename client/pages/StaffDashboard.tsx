@@ -265,6 +265,84 @@ export default function StaffDashboard() {
               </CardContent>
             </Card>
           </div>
+
+          {/* Mobile Card View - Visible on mobile and tablet */}
+          <div className="grid gap-4 lg:hidden">
+            {filteredCourses.flatMap((course) =>
+              course.batches && course.batches.length > 0
+                ? course.batches.map((batch) => (
+                    <Card key={`${course.courseId}-${batch.batchId}`} className="hover:shadow-md transition-shadow">
+                      <CardContent className="p-4">
+                        <div className="space-y-3">
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <h3 className="font-semibold text-lg text-gray-900">
+                                {course.courseName}
+                              </h3>
+                              <p className="text-sm text-gray-500 font-mono">
+                                Code: {course.courseCode}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <span className="text-gray-500">Batch:</span>
+                              <span className="ml-2 font-medium">Batch {batch.batchNo}</span>
+                            </div>
+                            <div>
+                              <span className="text-gray-500">Room:</span>
+                              <span className="ml-2 font-medium">{batch.roomNo}</span>
+                            </div>
+                          </div>
+
+                          <Link
+                            to={`/staff/attendance/${course.courseId}/${batch.batchId}`}
+                            className="block w-full"
+                          >
+                            <Button className="w-full">
+                              Mark Attendance
+                            </Button>
+                          </Link>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))
+                : [
+                    <Card key={course.courseId} className="opacity-60">
+                      <CardContent className="p-4">
+                        <div className="space-y-3">
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <h3 className="font-semibold text-lg text-gray-900">
+                                {course.courseName}
+                              </h3>
+                              <p className="text-sm text-gray-500 font-mono">
+                                Code: {course.courseCode}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <span className="text-gray-500">Batch:</span>
+                              <span className="ml-2 font-medium">No Batches</span>
+                            </div>
+                            <div>
+                              <span className="text-gray-500">Room:</span>
+                              <span className="ml-2 font-medium">{course.roomNo}</span>
+                            </div>
+                          </div>
+
+                          <Button className="w-full" disabled>
+                            No Batches Available
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ]
+            )}
+          </div>
         </div>
       </main>
     </div>

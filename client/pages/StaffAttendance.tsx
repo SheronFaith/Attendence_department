@@ -66,21 +66,52 @@ export default function StaffAttendance() {
         console.log("🚀 [STUDENTS API] Fetching students from:", apiUrl);
         console.log("📊 [PARAMS] CourseId:", courseId, "BatchId:", batchId);
 
-        const response = await fetch(apiUrl, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
+        // Try different fetch strategies
+        const fetchOptions = [
+          // Strategy 1: Basic fetch with minimal headers
+          {
+            method: 'GET',
           },
-        });
+          // Strategy 2: Fetch with standard headers
+          {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+            },
+          },
+          // Strategy 3: Fetch with CORS mode
+          {
+            method: 'GET',
+            mode: 'cors' as RequestMode,
+            headers: {
+              'Accept': 'application/json',
+            },
+          }
+        ];
 
-        console.log(
-          "📡 [STUDENTS RESPONSE] Status:",
-          response.status,
-          response.statusText,
-        );
-        console.log("📡 [STUDENTS RESPONSE] Headers:", Object.fromEntries(response.headers.entries()));
+        let response;
+        let lastError;
 
-        if (response.ok) {
+        for (let i = 0; i < fetchOptions.length; i++) {
+          try {
+            console.log(`🔄 [STUDENTS STRATEGY ${i + 1}] Trying fetch strategy ${i + 1}`);
+            response = await fetch(apiUrl, fetchOptions[i]);
+            console.log(`📡 [STUDENTS STRATEGY ${i + 1}] Status:`, response.status, response.statusText);
+
+            if (response.ok) {
+              break; // Success, exit the loop
+            } else {
+              console.log(`⚠️ [STUDENTS STRATEGY ${i + 1}] Failed with status:`, response.status);
+            }
+          } catch (strategyError) {
+            console.log(`❌ [STUDENTS STRATEGY ${i + 1}] Error:`, strategyError);
+            lastError = strategyError;
+            continue; // Try next strategy
+          }
+        }
+
+        if (response && response.ok) {
+          console.log("📡 [STUDENTS RESPONSE] Headers:", Object.fromEntries(response.headers.entries()));
           const studentsData = await response.json();
           console.log(
             "✅ [STUDENTS SUCCESS] Raw API data received:",

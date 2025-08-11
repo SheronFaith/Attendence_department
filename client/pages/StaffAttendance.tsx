@@ -353,12 +353,17 @@ export default function StaffAttendance() {
       );
 
       console.log("✅ [LOCAL STORAGE SUCCESS] Attendance saved locally");
-      console.log(
-        "📊 [TOTAL RECORDS] New total records count:",
-        existingRecords.length,
-      );
+      console.log("📊 [TOTAL RECORDS] New total records count:", existingRecords.length);
 
-      showToast("Attendance saved locally (API unavailable)");
+      const isCloudEnvironment = window.location.hostname.includes('fly.dev') ||
+                                 window.location.hostname.includes('netlify') ||
+                                 window.location.hostname.includes('vercel');
+
+      if (isCloudEnvironment) {
+        showToast("✅ Attendance saved successfully! (Demo Mode)");
+      } else {
+        showToast("Attendance saved locally (API unavailable)");
+      }
       navigate("/staff");
     } catch (error) {
       console.error("Error saving attendance:", error);

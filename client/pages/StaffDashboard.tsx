@@ -48,7 +48,6 @@ export default function StaffDashboard() {
         const response = await fetch('http://localhost:8080/courses/with-batches');
         if (response.ok) {
           const coursesData: ApiCourse[] = await response.json();
-          console.log("Courses fetched from API:", coursesData);
           setCourses(coursesData);
           setFilteredCourses(coursesData);
         } else {

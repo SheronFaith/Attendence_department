@@ -42,18 +42,30 @@ export default function StaffDashboard() {
       return;
     }
 
-    // TODO: Replace with axios GET /api/staff/courses
-    // const response = await axios.get('/api/staff/courses', {
-    //   headers: { Authorization: `Bearer ${token}` }
-    // });
-    // setCourses(response.data);
+    const fetchCourses = async () => {
+      try {
+        // Fetch courses with batches from API
+        const response = await fetch('http://localhost:8080/courses/with-batches');
+        if (response.ok) {
+          const coursesData: ApiCourse[] = await response.json();
+          console.log("Courses fetched from API:", coursesData);
+          setCourses(coursesData);
+          setFilteredCourses(coursesData);
+        } else {
+          console.error('Failed to fetch courses');
+          // Fallback to empty array
+          setCourses([]);
+          setFilteredCourses([]);
+        }
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+        // Fallback to empty array
+        setCourses([]);
+        setFilteredCourses([]);
+      }
+    };
 
-    const staffCourses = mockCourses.filter(
-      (course) => course.staffId === user.id,
-    );
-    console.log("User ID:", user.id, "Staff courses found:", staffCourses);
-    setCourses(staffCourses);
-    setFilteredCourses(staffCourses);
+    fetchCourses();
     setStaffName("Dr. Sheron"); // In real app, get from user data
   }, [navigate]);
 

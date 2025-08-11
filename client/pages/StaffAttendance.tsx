@@ -130,15 +130,25 @@ export default function StaffAttendance() {
           );
           return;
         } else {
+          const errorText = await response.text();
           console.warn(
             "⚠️ [STUDENTS ERROR] Response not OK:",
             response.status,
             response.statusText,
+            "Body:",
+            errorText
           );
         }
       } catch (error) {
         console.error("❌ [STUDENTS FETCH ERROR] API not available:", error);
         console.log("🔄 [FALLBACK] Switching to demo students data");
+
+        // Log more details about the error
+        if (error instanceof Error) {
+          console.log("❌ [ERROR DETAILS] Name:", error.name);
+          console.log("❌ [ERROR DETAILS] Message:", error.message);
+          console.log("❌ [ERROR DETAILS] Stack:", error.stack);
+        }
       }
 
       // Fallback to mock students when API is not available

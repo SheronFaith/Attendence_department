@@ -225,17 +225,21 @@ export default function StaffAttendance() {
     setIsSubmitting(true);
 
     try {
+      console.log('📤 [ATTENDANCE SUBMIT] Starting attendance submission process');
+
       // Transform student status to API format
       const statusMap = {
         'Present': 'PRESENT',
         'OD': 'OD',
         'Leave': 'ABSENT'
       };
+      console.log('🔄 [STATUS MAP] Using status mapping:', statusMap);
 
       const attendanceList = students.map((student) => ({
         studentId: student.id,
         status: statusMap[student.status] || 'PRESENT'
       }));
+      console.log('👥 [ATTENDANCE LIST] Transformed attendance data:', attendanceList);
 
       const attendanceData = {
         courseId: parseInt(courseId!),
@@ -244,10 +248,15 @@ export default function StaffAttendance() {
         time: `${periodFrom.toString().padStart(2, '0')}:30:00`, // Convert period to time format
         attendanceList
       };
+      console.log('📊 [SUBMISSION DATA] Complete attendance payload:', attendanceData);
 
       // Try to submit to API first
       try {
-        const response = await fetch('http://localhost:8080/attendance/mark', {
+        const apiUrl = 'http://localhost:8080/attendance/mark';
+        console.log('🚀 [ATTENDANCE API] Submitting to:', apiUrl);
+        console.log('📤 [REQUEST BODY]:', JSON.stringify(attendanceData, null, 2));
+
+        const response = await fetch(apiUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -255,13 +264,20 @@ export default function StaffAttendance() {
           body: JSON.stringify(attendanceData)
         });
 
+        console.log('📡 [ATTENDANCE RESPONSE] Status:', response.status, response.statusText);
+
         if (response.ok) {
+          const responseData = await response.text();
+          console.log('�� [ATTENDANCE SUCCESS] Response data:', responseData);
           showToast("Attendance saved successfully!");
           navigate("/staff");
           return;
+        } else {
+          console.warn('⚠️ [ATTENDANCE ERROR] Response not OK:', response.status, response.statusText);
         }
       } catch (apiError) {
-        console.warn('API not available, saving locally:', apiError);
+        console.error('❌ [ATTENDANCE API ERROR] API submission failed:', apiError);
+        console.log('🔄 [FALLBACK] Switching to local storage');
       }
 
       // Fallback to localStorage when API is not available

@@ -48,12 +48,19 @@ export default function StaffDashboard() {
         const apiUrl = "https://department-attendance-backend-production.up.railway.app/courses/with-batches";
         console.log("🚀 [API CALL] Fetching courses from:", apiUrl);
 
-        const response = await fetch(apiUrl);
+        const response = await fetch(apiUrl, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
         console.log(
           "📡 [API RESPONSE] Status:",
           response.status,
           response.statusText,
         );
+        console.log("📡 [API RESPONSE] Headers:", Object.fromEntries(response.headers.entries()));
 
         if (response.ok) {
           const coursesData: ApiCourse[] = await response.json();
@@ -68,15 +75,25 @@ export default function StaffDashboard() {
           );
           return;
         } else {
+          const errorText = await response.text();
           console.warn(
             "⚠️ [API ERROR] Response not OK:",
             response.status,
             response.statusText,
+            "Body:",
+            errorText
           );
         }
       } catch (error) {
         console.error("❌ [API FETCH ERROR] API not available:", error);
         console.log("🔄 [FALLBACK] Switching to demo data");
+
+        // Log more details about the error
+        if (error instanceof Error) {
+          console.log("❌ [ERROR DETAILS] Name:", error.name);
+          console.log("❌ [ERROR DETAILS] Message:", error.message);
+          console.log("❌ [ERROR DETAILS] Stack:", error.stack);
+        }
       }
 
       // Fallback to mock data when API is not available

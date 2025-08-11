@@ -65,11 +65,31 @@ export default function Login() {
 
       if (user) {
         saveUser(user);
+
+        // Get user's actual name from the staff/admin data
+        let actualUserName = "";
         if (user.role === "staff") {
-          navigate("/staff");
+          const staffData = mockStaff.find(s => s.id === user.id);
+          actualUserName = staffData?.name || "Staff User";
         } else {
-          navigate("/admin");
+          const adminData = mockAdmins.find(a => a.id === user.id);
+          actualUserName = adminData?.name || "Admin User";
         }
+
+        // Show loading screen
+        setUserName(actualUserName);
+        setUserRole(user.role);
+        setShowLoading(true);
+        setIsLoading(false);
+
+        // Navigate after 3 seconds
+        setTimeout(() => {
+          if (user.role === "staff") {
+            navigate("/staff");
+          } else {
+            navigate("/admin");
+          }
+        }, 3000);
       } else {
         setError(
           "Invalid credentials. Please check your username and password.",

@@ -36,6 +36,7 @@ export default function StaffDashboard() {
     const staffCourses = mockCourses.filter(
       (course) => course.staffId === user.id,
     );
+    console.log("User ID:", user.id, "Staff courses found:", staffCourses);
     setCourses(staffCourses);
     setFilteredCourses(staffCourses);
     setStaffName("Dr. Sheron"); // In real app, get from user data

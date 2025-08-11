@@ -118,7 +118,7 @@ export default function StaffAttendance() {
             studentsData,
           );
           console.log(
-            "👥 [STUDENTS COUNT] Number of students:",
+            "��� [STUDENTS COUNT] Number of students:",
             studentsData.length,
           );
 
@@ -161,17 +161,10 @@ export default function StaffAttendance() {
           );
           return;
         } else {
-          const errorText = await response.text();
-          console.warn(
-            "⚠️ [STUDENTS ERROR] Response not OK:",
-            response.status,
-            response.statusText,
-            "Body:",
-            errorText
-          );
+          throw lastError || new Error('All students fetch strategies failed');
         }
       } catch (error) {
-        console.error("❌ [STUDENTS FETCH ERROR] API not available:", error);
+        console.error("❌ [STUDENTS FETCH ERROR] All strategies failed:", error);
         console.log("🔄 [FALLBACK] Switching to demo students data");
 
         // Log more details about the error

@@ -96,7 +96,7 @@ export default function StaffDashboard() {
     };
 
     fetchCourses();
-    setStaffName("Dr. Sheron"); // In real app, get from user data
+    setStaffName(" "); // In real app, get from user data
   }, [navigate]);
 
   useEffect(() => {

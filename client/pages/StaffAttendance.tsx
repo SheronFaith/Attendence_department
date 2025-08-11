@@ -59,10 +59,17 @@ export default function StaffAttendance() {
 
     const fetchStudents = async () => {
       try {
-        // Try to fetch students from API first
-        const response = await fetch(`http://localhost:8080/api/students?courseId=${courseId}&batchId=${batchId}`);
+        const apiUrl = `http://localhost:8080/api/students?courseId=${courseId}&batchId=${batchId}`;
+        console.log('🚀 [STUDENTS API] Fetching students from:', apiUrl);
+        console.log('📊 [PARAMS] CourseId:', courseId, 'BatchId:', batchId);
+
+        const response = await fetch(apiUrl);
+        console.log('📡 [STUDENTS RESPONSE] Status:', response.status, response.statusText);
+
         if (response.ok) {
           const studentsData = await response.json();
+          console.log('✅ [STUDENTS SUCCESS] Raw API data received:', studentsData);
+          console.log('👥 [STUDENTS COUNT] Number of students:', studentsData.length);
 
           // Transform API data to component format
           const transformedStudents = studentsData.map((student: any) => ({
@@ -74,10 +81,12 @@ export default function StaffAttendance() {
             status: 'Present' as const
           }));
 
+          console.log('🔄 [DATA TRANSFORM] Transformed students data:', transformedStudents);
+
           // Set course info from first student's data
           if (studentsData.length > 0) {
             const firstStudent = studentsData[0];
-            setCourse({
+            const courseInfo = {
               id: parseInt(courseId),
               courseName: firstStudent.course.courseName,
               courseCode: firstStudent.course.courseCode.toString(),
@@ -86,14 +95,21 @@ export default function StaffAttendance() {
               section: firstStudent.batch?.batchNo?.toString() || '',
               year: parseInt(firstStudent.semester),
               staffId: user.id
-            });
+            };
+
+            console.log('📚 [COURSE INFO] Extracted course data:', courseInfo);
+            setCourse(courseInfo);
           }
 
           setStudents(transformedStudents);
+          console.log('💾 [UI UPDATE] Students data set to state, using live API data');
           return;
+        } else {
+          console.warn('⚠️ [STUDENTS ERROR] Response not OK:', response.status, response.statusText);
         }
       } catch (error) {
-        console.warn('API not available, using fallback student data:', error);
+        console.error('❌ [STUDENTS FETCH ERROR] API not available:', error);
+        console.log('🔄 [FALLBACK] Switching to demo students data');
       }
 
       // Fallback to mock students when API is not available

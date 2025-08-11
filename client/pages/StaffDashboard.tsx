@@ -29,8 +29,8 @@ import { Badge } from "@/components/ui/badge";
 import { LogOut, Search } from "lucide-react";
 
 export default function StaffDashboard() {
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
+  const [courses, setCourses] = useState<ApiCourse[]>([]);
+  const [filteredCourses, setFilteredCourses] = useState<ApiCourse[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [staffName, setStaffName] = useState("");
   const navigate = useNavigate();

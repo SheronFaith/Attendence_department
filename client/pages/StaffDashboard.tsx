@@ -45,32 +45,42 @@ export default function StaffDashboard() {
 
     const fetchCourses = async () => {
       try {
-        const apiUrl = 'http://localhost:8080/courses/with-batches';
-        console.log('🚀 [API CALL] Fetching courses from:', apiUrl);
+        const apiUrl = "http://localhost:8080/courses/with-batches";
+        console.log("🚀 [API CALL] Fetching courses from:", apiUrl);
 
         const response = await fetch(apiUrl);
-        console.log('📡 [API RESPONSE] Status:', response.status, response.statusText);
+        console.log(
+          "📡 [API RESPONSE] Status:",
+          response.status,
+          response.statusText,
+        );
 
         if (response.ok) {
           const coursesData: ApiCourse[] = await response.json();
-          console.log('✅ [API SUCCESS] Courses data received:', coursesData);
-          console.log('📊 [API DATA] Number of courses:', coursesData.length);
+          console.log("✅ [API SUCCESS] Courses data received:", coursesData);
+          console.log("📊 [API DATA] Number of courses:", coursesData.length);
 
           setCourses(coursesData);
           setFilteredCourses(coursesData);
           setUsingFallbackData(false);
-          console.log('💾 [UI UPDATE] Courses data set to state, using live API data');
+          console.log(
+            "💾 [UI UPDATE] Courses data set to state, using live API data",
+          );
           return;
         } else {
-          console.warn('⚠️ [API ERROR] Response not OK:', response.status, response.statusText);
+          console.warn(
+            "⚠️ [API ERROR] Response not OK:",
+            response.status,
+            response.statusText,
+          );
         }
       } catch (error) {
-        console.error('❌ [API FETCH ERROR] API not available:', error);
-        console.log('🔄 [FALLBACK] Switching to demo data');
+        console.error("❌ [API FETCH ERROR] API not available:", error);
+        console.log("🔄 [FALLBACK] Switching to demo data");
       }
 
       // Fallback to mock data when API is not available
-      console.log('🎭 [FALLBACK MODE] Using demo/mock data instead of API');
+      console.log("🎭 [FALLBACK MODE] Using demo/mock data instead of API");
       setUsingFallbackData(true);
       const fallbackCourses: ApiCourse[] = [
         {
@@ -82,14 +92,14 @@ export default function StaffDashboard() {
             {
               batchId: 1,
               batchNo: 1,
-              roomNo: "B101"
+              roomNo: "B101",
             },
             {
               batchId: 2,
               batchNo: 2,
-              roomNo: "B102"
-            }
-          ]
+              roomNo: "B102",
+            },
+          ],
         },
         {
           courseId: 2,
@@ -100,23 +110,23 @@ export default function StaffDashboard() {
             {
               batchId: 3,
               batchNo: 1,
-              roomNo: "B201"
-            }
-          ]
+              roomNo: "B201",
+            },
+          ],
         },
         {
           courseId: 3,
           courseName: "Chemistry",
           courseCode: 103,
           roomNo: "C103",
-          batches: null
-        }
+          batches: null,
+        },
       ];
 
       setCourses(fallbackCourses);
       setFilteredCourses(fallbackCourses);
-      console.log('📋 [FALLBACK DATA] Demo courses loaded:', fallbackCourses);
-      console.log('💾 [UI UPDATE] Demo data set to state');
+      console.log("📋 [FALLBACK DATA] Demo courses loaded:", fallbackCourses);
+      console.log("💾 [UI UPDATE] Demo data set to state");
     };
 
     fetchCourses();
@@ -180,7 +190,8 @@ export default function StaffDashboard() {
             {usingFallbackData && (
               <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
                 <p className="text-sm text-yellow-800">
-                  ⚠️ Using demo data - API server not available. Connect to your backend API for live data.
+                  ⚠️ Using demo data - API server not available. Connect to your
+                  backend API for live data.
                 </p>
               </div>
             )}
@@ -197,7 +208,6 @@ export default function StaffDashboard() {
               className="pl-10"
             />
           </div>
-
 
           {/* Desktop Table View - Hidden on mobile */}
           <div className="hidden lg:block">
@@ -231,7 +241,10 @@ export default function StaffDashboard() {
                       {filteredCourses.flatMap((course) =>
                         course.batches && course.batches.length > 0
                           ? course.batches.map((batch) => (
-                              <tr key={`${course.courseId}-${batch.batchId}`} className="hover:bg-gray-50">
+                              <tr
+                                key={`${course.courseId}-${batch.batchId}`}
+                                className="hover:bg-gray-50"
+                              >
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                   {course.courseName}
                                 </td>
@@ -245,14 +258,19 @@ export default function StaffDashboard() {
                                   {batch.roomNo}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                  <Link to={`/staff/attendance/${course.courseId}/${batch.batchId}`}>
+                                  <Link
+                                    to={`/staff/attendance/${course.courseId}/${batch.batchId}`}
+                                  >
                                     <Button size="sm">Mark Attendance</Button>
                                   </Link>
                                 </td>
                               </tr>
                             ))
                           : [
-                              <tr key={course.courseId} className="hover:bg-gray-50">
+                              <tr
+                                key={course.courseId}
+                                className="hover:bg-gray-50"
+                              >
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                   {course.courseName}
                                 </td>
@@ -270,8 +288,8 @@ export default function StaffDashboard() {
                                     No Batches
                                   </Button>
                                 </td>
-                              </tr>
-                            ]
+                              </tr>,
+                            ],
                       )}
                     </tbody>
                   </table>
@@ -285,7 +303,10 @@ export default function StaffDashboard() {
             {filteredCourses.flatMap((course) =>
               course.batches && course.batches.length > 0
                 ? course.batches.map((batch) => (
-                    <Card key={`${course.courseId}-${batch.batchId}`} className="hover:shadow-md transition-shadow">
+                    <Card
+                      key={`${course.courseId}-${batch.batchId}`}
+                      className="hover:shadow-md transition-shadow"
+                    >
                       <CardContent className="p-4">
                         <div className="space-y-3">
                           <div className="flex items-start justify-between">
@@ -302,11 +323,15 @@ export default function StaffDashboard() {
                           <div className="grid grid-cols-2 gap-4 text-sm">
                             <div>
                               <span className="text-gray-500">Batch:</span>
-                              <span className="ml-2 font-medium">Batch {batch.batchNo}</span>
+                              <span className="ml-2 font-medium">
+                                Batch {batch.batchNo}
+                              </span>
                             </div>
                             <div>
                               <span className="text-gray-500">Room:</span>
-                              <span className="ml-2 font-medium">{batch.roomNo}</span>
+                              <span className="ml-2 font-medium">
+                                {batch.roomNo}
+                              </span>
                             </div>
                           </div>
 
@@ -314,9 +339,7 @@ export default function StaffDashboard() {
                             to={`/staff/attendance/${course.courseId}/${batch.batchId}`}
                             className="block w-full"
                           >
-                            <Button className="w-full">
-                              Mark Attendance
-                            </Button>
+                            <Button className="w-full">Mark Attendance</Button>
                           </Link>
                         </div>
                       </CardContent>
@@ -340,11 +363,15 @@ export default function StaffDashboard() {
                           <div className="grid grid-cols-2 gap-4 text-sm">
                             <div>
                               <span className="text-gray-500">Batch:</span>
-                              <span className="ml-2 font-medium">No Batches</span>
+                              <span className="ml-2 font-medium">
+                                No Batches
+                              </span>
                             </div>
                             <div>
                               <span className="text-gray-500">Room:</span>
-                              <span className="ml-2 font-medium">{course.roomNo}</span>
+                              <span className="ml-2 font-medium">
+                                {course.roomNo}
+                              </span>
                             </div>
                           </div>
 
@@ -353,8 +380,8 @@ export default function StaffDashboard() {
                           </Button>
                         </div>
                       </CardContent>
-                    </Card>
-                  ]
+                    </Card>,
+                  ],
             )}
           </div>
         </div>

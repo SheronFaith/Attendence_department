@@ -31,7 +31,10 @@ interface StudentAttendance extends Student {
 }
 
 export default function StaffAttendance() {
-  const { courseId, batchId } = useParams<{ courseId: string; batchId: string }>();
+  const { courseId, batchId } = useParams<{
+    courseId: string;
+    batchId: string;
+  }>();
   const navigate = useNavigate();
   const [course, setCourse] = useState<Course | null>(null);
   const [students, setStudents] = useState<StudentAttendance[]>([]);
@@ -60,28 +63,41 @@ export default function StaffAttendance() {
     const fetchStudents = async () => {
       try {
         const apiUrl = `http://localhost:8080/api/students?courseId=${courseId}&batchId=${batchId}`;
-        console.log('🚀 [STUDENTS API] Fetching students from:', apiUrl);
-        console.log('📊 [PARAMS] CourseId:', courseId, 'BatchId:', batchId);
+        console.log("🚀 [STUDENTS API] Fetching students from:", apiUrl);
+        console.log("📊 [PARAMS] CourseId:", courseId, "BatchId:", batchId);
 
         const response = await fetch(apiUrl);
-        console.log('📡 [STUDENTS RESPONSE] Status:', response.status, response.statusText);
+        console.log(
+          "📡 [STUDENTS RESPONSE] Status:",
+          response.status,
+          response.statusText,
+        );
 
         if (response.ok) {
           const studentsData = await response.json();
-          console.log('✅ [STUDENTS SUCCESS] Raw API data received:', studentsData);
-          console.log('👥 [STUDENTS COUNT] Number of students:', studentsData.length);
+          console.log(
+            "✅ [STUDENTS SUCCESS] Raw API data received:",
+            studentsData,
+          );
+          console.log(
+            "👥 [STUDENTS COUNT] Number of students:",
+            studentsData.length,
+          );
 
           // Transform API data to component format
           const transformedStudents = studentsData.map((student: any) => ({
             id: student.id,
             studentName: student.name,
             studentRollNo: student.rollNumber,
-            courseBatch: student.batch?.batchNo?.toString() || '',
+            courseBatch: student.batch?.batchNo?.toString() || "",
             studentSection: student.section,
-            status: 'Present' as const
+            status: "Present" as const,
           }));
 
-          console.log('🔄 [DATA TRANSFORM] Transformed students data:', transformedStudents);
+          console.log(
+            "🔄 [DATA TRANSFORM] Transformed students data:",
+            transformedStudents,
+          );
 
           // Set course info from first student's data
           if (studentsData.length > 0) {
@@ -90,30 +106,36 @@ export default function StaffAttendance() {
               id: parseInt(courseId),
               courseName: firstStudent.course.courseName,
               courseCode: firstStudent.course.courseCode.toString(),
-              courseBatch: firstStudent.batch?.batchNo?.toString() || '',
-              courseType: 'Course' as const,
-              section: firstStudent.batch?.batchNo?.toString() || '',
+              courseBatch: firstStudent.batch?.batchNo?.toString() || "",
+              courseType: "Course" as const,
+              section: firstStudent.batch?.batchNo?.toString() || "",
               year: parseInt(firstStudent.semester),
-              staffId: user.id
+              staffId: user.id,
             };
 
-            console.log('📚 [COURSE INFO] Extracted course data:', courseInfo);
+            console.log("📚 [COURSE INFO] Extracted course data:", courseInfo);
             setCourse(courseInfo);
           }
 
           setStudents(transformedStudents);
-          console.log('💾 [UI UPDATE] Students data set to state, using live API data');
+          console.log(
+            "💾 [UI UPDATE] Students data set to state, using live API data",
+          );
           return;
         } else {
-          console.warn('⚠️ [STUDENTS ERROR] Response not OK:', response.status, response.statusText);
+          console.warn(
+            "⚠️ [STUDENTS ERROR] Response not OK:",
+            response.status,
+            response.statusText,
+          );
         }
       } catch (error) {
-        console.error('❌ [STUDENTS FETCH ERROR] API not available:', error);
-        console.log('🔄 [FALLBACK] Switching to demo students data');
+        console.error("❌ [STUDENTS FETCH ERROR] API not available:", error);
+        console.log("🔄 [FALLBACK] Switching to demo students data");
       }
 
       // Fallback to mock students when API is not available
-      console.log('🎭 [STUDENTS FALLBACK] Using demo/mock student data');
+      console.log("🎭 [STUDENTS FALLBACK] Using demo/mock student data");
       const fallbackStudents = [
         {
           id: 1,
@@ -121,7 +143,7 @@ export default function StaffAttendance() {
           studentRollNo: "M101",
           courseBatch: batchId || "1",
           studentSection: "A",
-          status: 'Present' as const
+          status: "Present" as const,
         },
         {
           id: 2,
@@ -129,7 +151,7 @@ export default function StaffAttendance() {
           studentRollNo: "M102",
           courseBatch: batchId || "1",
           studentSection: "A",
-          status: 'Present' as const
+          status: "Present" as const,
         },
         {
           id: 3,
@@ -137,31 +159,34 @@ export default function StaffAttendance() {
           studentRollNo: "P101",
           courseBatch: batchId || "1",
           studentSection: "B",
-          status: 'Present' as const
-        }
+          status: "Present" as const,
+        },
       ];
 
       // Set fallback course info
-      const courseNames = ['Mathematics', 'Physics', 'Chemistry'];
-      const courseName = courseNames[parseInt(courseId) - 1] || 'Sample Course';
+      const courseNames = ["Mathematics", "Physics", "Chemistry"];
+      const courseName = courseNames[parseInt(courseId) - 1] || "Sample Course";
 
       const fallbackCourse = {
         id: parseInt(courseId),
         courseName: courseName,
         courseCode: `${100 + parseInt(courseId)}`,
         courseBatch: batchId || "1",
-        courseType: 'Course' as const,
+        courseType: "Course" as const,
         section: batchId || "1",
         year: 1,
-        staffId: user.id
+        staffId: user.id,
       };
 
       setCourse(fallbackCourse);
       setStudents(fallbackStudents);
 
-      console.log('📚 [FALLBACK COURSE] Demo course info:', fallbackCourse);
-      console.log('👥 [FALLBACK STUDENTS] Demo students loaded:', fallbackStudents);
-      console.log('💾 [UI UPDATE] Demo data set to state');
+      console.log("📚 [FALLBACK COURSE] Demo course info:", fallbackCourse);
+      console.log(
+        "👥 [FALLBACK STUDENTS] Demo students loaded:",
+        fallbackStudents,
+      );
+      console.log("💾 [UI UPDATE] Demo data set to state");
     };
 
     fetchStudents();
@@ -225,95 +250,133 @@ export default function StaffAttendance() {
     setIsSubmitting(true);
 
     try {
-      console.log('📤 [ATTENDANCE SUBMIT] Starting attendance submission process');
+      console.log(
+        "📤 [ATTENDANCE SUBMIT] Starting attendance submission process",
+      );
 
       // Transform student status to API format
       const statusMap = {
-        'Present': 'PRESENT',
-        'OD': 'OD',
-        'Leave': 'ABSENT'
+        Present: "PRESENT",
+        OD: "OD",
+        Leave: "ABSENT",
       };
-      console.log('🔄 [STATUS MAP] Using status mapping:', statusMap);
+      console.log("🔄 [STATUS MAP] Using status mapping:", statusMap);
 
       const attendanceList = students.map((student) => ({
         studentId: student.id,
-        status: statusMap[student.status] || 'PRESENT'
+        status: statusMap[student.status] || "PRESENT",
       }));
-      console.log('👥 [ATTENDANCE LIST] Transformed attendance data:', attendanceList);
+      console.log(
+        "👥 [ATTENDANCE LIST] Transformed attendance data:",
+        attendanceList,
+      );
 
       const attendanceData = {
         courseId: parseInt(courseId!),
         batchId: parseInt(batchId!),
         date: date,
-        time: `${periodFrom.toString().padStart(2, '0')}:30:00`, // Convert period to time format
-        attendanceList
+        time: `${periodFrom.toString().padStart(2, "0")}:30:00`, // Convert period to time format
+        attendanceList,
       };
-      console.log('📊 [SUBMISSION DATA] Complete attendance payload:', attendanceData);
+      console.log(
+        "📊 [SUBMISSION DATA] Complete attendance payload:",
+        attendanceData,
+      );
 
       // Try to submit to API first
       try {
-        const apiUrl = 'http://localhost:8080/attendance/mark';
-        console.log('🚀 [ATTENDANCE API] Submitting to:', apiUrl);
-        console.log('📤 [REQUEST BODY]:', JSON.stringify(attendanceData, null, 2));
+        const apiUrl = "http://localhost:8080/attendance/mark";
+        console.log("🚀 [ATTENDANCE API] Submitting to:", apiUrl);
+        console.log(
+          "📤 [REQUEST BODY]:",
+          JSON.stringify(attendanceData, null, 2),
+        );
 
         const response = await fetch(apiUrl, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(attendanceData)
+          body: JSON.stringify(attendanceData),
         });
 
-        console.log('📡 [ATTENDANCE RESPONSE] Status:', response.status, response.statusText);
+        console.log(
+          "📡 [ATTENDANCE RESPONSE] Status:",
+          response.status,
+          response.statusText,
+        );
 
         if (response.ok) {
           const responseData = await response.text();
-          console.log('�� [ATTENDANCE SUCCESS] Response data:', responseData);
+          console.log("�� [ATTENDANCE SUCCESS] Response data:", responseData);
           showToast("Attendance saved successfully!");
           navigate("/staff");
           return;
         } else {
-          console.warn('⚠️ [ATTENDANCE ERROR] Response not OK:', response.status, response.statusText);
+          console.warn(
+            "⚠️ [ATTENDANCE ERROR] Response not OK:",
+            response.status,
+            response.statusText,
+          );
         }
       } catch (apiError) {
-        console.error('❌ [ATTENDANCE API ERROR] API submission failed:', apiError);
-        console.log('🔄 [FALLBACK] Switching to local storage');
+        console.error(
+          "❌ [ATTENDANCE API ERROR] API submission failed:",
+          apiError,
+        );
+        console.log("🔄 [FALLBACK] Switching to local storage");
       }
 
       // Fallback to localStorage when API is not available
-      console.log('💾 [LOCAL STORAGE] Creating local attendance record as fallback');
+      console.log(
+        "💾 [LOCAL STORAGE] Creating local attendance record as fallback",
+      );
       const localAttendanceRecord = {
         id: Date.now(),
         courseId: parseInt(courseId!),
         batchId: parseInt(batchId!),
-        courseName: course?.courseName || 'Unknown Course',
+        courseName: course?.courseName || "Unknown Course",
         date,
         periodFrom,
         periodTo,
-        entries: students.map(student => ({
+        entries: students.map((student) => ({
           studentId: student.id,
           studentRollNo: student.studentRollNo,
           studentName: student.studentName,
-          status: student.status
-        }))
+          status: student.status,
+        })),
       };
-      console.log('📋 [LOCAL RECORD] Local attendance data:', localAttendanceRecord);
+      console.log(
+        "📋 [LOCAL RECORD] Local attendance data:",
+        localAttendanceRecord,
+      );
 
       // Save to localStorage as fallback
-      const existingRecords = JSON.parse(localStorage.getItem('attendance_records') || '[]');
-      console.log('📚 [EXISTING RECORDS] Current stored records count:', existingRecords.length);
+      const existingRecords = JSON.parse(
+        localStorage.getItem("attendance_records") || "[]",
+      );
+      console.log(
+        "📚 [EXISTING RECORDS] Current stored records count:",
+        existingRecords.length,
+      );
 
       existingRecords.push(localAttendanceRecord);
-      localStorage.setItem('attendance_records', JSON.stringify(existingRecords));
+      localStorage.setItem(
+        "attendance_records",
+        JSON.stringify(existingRecords),
+      );
 
-      console.log('✅ [LOCAL STORAGE SUCCESS] Attendance saved locally');
-      console.log('📊 [TOTAL RECORDS] New total records count:', existingRecords.length);
+      console.log("✅ [LOCAL STORAGE SUCCESS] Attendance saved locally");
+      console.log(
+        "📊 [TOTAL RECORDS] New total records count:",
+        existingRecords.length,
+      );
 
       showToast("Attendance saved locally (API unavailable)");
       navigate("/staff");
     } catch (error) {
-      console.error('Error saving attendance:', error);
-      showToast('Failed to save attendance. Please try again.', 5000);
+      console.error("Error saving attendance:", error);
+      showToast("Failed to save attendance. Please try again.", 5000);
     } finally {
       setIsSubmitting(false);
     }

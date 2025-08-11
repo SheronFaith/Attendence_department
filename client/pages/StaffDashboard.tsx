@@ -51,6 +51,7 @@ export default function StaffDashboard() {
           const coursesData: ApiCourse[] = await response.json();
           setCourses(coursesData);
           setFilteredCourses(coursesData);
+          setUsingFallbackData(false);
           return;
         }
       } catch (error) {
@@ -58,6 +59,7 @@ export default function StaffDashboard() {
       }
 
       // Fallback to mock data when API is not available
+      setUsingFallbackData(true);
       const fallbackCourses: ApiCourse[] = [
         {
           courseId: 1,

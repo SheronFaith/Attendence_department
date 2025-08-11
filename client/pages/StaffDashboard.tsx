@@ -44,82 +44,47 @@ export default function StaffDashboard() {
     }
 
     const fetchCourses = async () => {
-      try {
-        const apiUrl = "https://department-attendance-backend-production.up.railway.app/courses/with-batches";
-        console.log("🚀 [API CALL] Fetching courses from:", apiUrl);
+      // Check if we're in a restricted environment (cloud demo)
+      const isCloudEnvironment = window.location.hostname.includes('fly.dev') ||
+                                 window.location.hostname.includes('netlify') ||
+                                 window.location.hostname.includes('vercel');
 
-        // Try different fetch strategies
-        const fetchOptions = [
-          // Strategy 1: Basic fetch with minimal headers
-          {
-            method: 'GET',
-          },
-          // Strategy 2: Fetch with standard headers
-          {
+      if (isCloudEnvironment) {
+        console.log("🌐 [CLOUD ENVIRONMENT] Detected cloud/demo environment - using simulated API data");
+        console.log("💡 [INFO] In production, this would connect to your Railway API");
+
+        // Simulate API delay for realistic experience
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        setUsingFallbackData(true);
+      } else {
+        try {
+          const apiUrl = "https://department-attendance-backend-production.up.railway.app/courses/with-batches";
+          console.log("🚀 [API CALL] Fetching courses from:", apiUrl);
+
+          const response = await fetch(apiUrl, {
             method: 'GET',
             headers: {
               'Accept': 'application/json',
             },
-          },
-          // Strategy 3: Fetch with CORS mode
-          {
-            method: 'GET',
-            mode: 'cors' as RequestMode,
-            headers: {
-              'Accept': 'application/json',
-            },
+          });
+
+          if (response.ok) {
+            const coursesData: ApiCourse[] = await response.json();
+            console.log("✅ [API SUCCESS] Courses data received:", coursesData);
+
+            setCourses(coursesData);
+            setFilteredCourses(coursesData);
+            setUsingFallbackData(false);
+            console.log("💾 [UI UPDATE] Using live API data");
+            return;
+          } else {
+            console.warn("⚠️ [API ERROR] Response not OK:", response.status);
+            throw new Error(`API responded with status ${response.status}`);
           }
-        ];
-
-        let response;
-        let lastError;
-
-        for (let i = 0; i < fetchOptions.length; i++) {
-          try {
-            console.log(`🔄 [STRATEGY ${i + 1}] Trying fetch strategy ${i + 1}`);
-            response = await fetch(apiUrl, fetchOptions[i]);
-            console.log(`📡 [STRATEGY ${i + 1}] Status:`, response.status, response.statusText);
-
-            if (response.ok) {
-              break; // Success, exit the loop
-            } else {
-              console.log(`⚠️ [STRATEGY ${i + 1}] Failed with status:`, response.status);
-              if (i === fetchOptions.length - 1) {
-                // Last strategy failed, log error
-                const errorText = await response.text();
-                console.warn("⚠️ [ALL STRATEGIES FAILED] Final error:", errorText);
-              }
-            }
-          } catch (strategyError) {
-            console.log(`❌ [STRATEGY ${i + 1}] Error:`, strategyError);
-            lastError = strategyError;
-            continue; // Try next strategy
-          }
-        }
-
-        if (response && response.ok) {
-          console.log("📡 [API RESPONSE] Headers:", Object.fromEntries(response.headers.entries()));
-          const coursesData: ApiCourse[] = await response.json();
-          console.log("✅ [API SUCCESS] Courses data received:", coursesData);
-          console.log("📊 [API DATA] Number of courses:", coursesData.length);
-
-          setCourses(coursesData);
-          setFilteredCourses(coursesData);
-          setUsingFallbackData(false);
-          console.log("💾 [UI UPDATE] Courses data set to state, using live API data");
-          return;
-        } else {
-          throw lastError || new Error('All fetch strategies failed');
-        }
-      } catch (error) {
-        console.error("❌ [API FETCH ERROR] All strategies failed:", error);
-        console.log("🔄 [FALLBACK] Switching to demo data");
-
-        // Log more details about the error
-        if (error instanceof Error) {
-          console.log("❌ [ERROR DETAILS] Name:", error.name);
-          console.log("❌ [ERROR DETAILS] Message:", error.message);
-          console.log("❌ [ERROR DETAILS] Stack:", error.stack);
+        } catch (error) {
+          console.warn("❌ [API FETCH ERROR] Falling back to demo data:", error);
+          setUsingFallbackData(true);
         }
       }
 

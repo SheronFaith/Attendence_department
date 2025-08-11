@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test API</title>
+</head>
+<body>
+    <h1>Testing API Connectivity</h1>
+    <div id="result"></div>
+    
+    <script>
+        async function testAPI() {
+            console.log('🧪 [TEST] Starting API test');
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                const url = 'https://department-attendance-backend-production.up.railway.app/courses/with-batches';
+                console.log('🚀 [TEST API] Fetching from:', url);
+                
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                
+                console.log('📡 [TEST RESPONSE] Status:', response.status);
+                console.log('📡 [TEST RESPONSE] Headers:', Object.fromEntries(response.headers.entries()));
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('✅ [TEST SUCCESS] Data received:', data);
+                    resultDiv.innerHTML = `<h2>✅ API Working!</h2><pre>${JSON.stringify(data, null, 2)}</pre>`;
+                } else {
+                    const errorText = await response.text();
+                    console.log('❌ [TEST ERROR] Response not OK:', response.status, errorText);
+                    resultDiv.innerHTML = `<h2>❌ API Error</h2><p>Status: ${response.status}</p><p>Error: ${errorText}</p>`;
+                }
+            } catch (error) {
+                console.error('❌ [TEST FETCH ERROR]:', error);
+                resultDiv.innerHTML = `<h2>❌ Network Error</h2><p>${error.message}</p>`;
+            }
+        }
+        
+        // Run test when page loads
+        testAPI();
+    </script>
+</body>
+</html>

@@ -70,6 +70,7 @@ export default function StaffDashboard() {
       }
 
       // Fallback to mock data when API is not available
+      console.log('🎭 [FALLBACK MODE] Using demo/mock data instead of API');
       setUsingFallbackData(true);
       const fallbackCourses: ApiCourse[] = [
         {

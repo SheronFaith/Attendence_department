@@ -52,25 +52,55 @@ export default function StaffAttendance() {
       return;
     }
 
-    if (!courseId) {
+    if (!courseId || !batchId) {
       navigate("/staff");
       return;
     }
 
-    const foundCourse = mockCourses.find((c) => c.id === parseInt(courseId));
-    if (!foundCourse || foundCourse.staffId !== user.id) {
-      navigate("/staff");
-      return;
-    }
+    const fetchStudents = async () => {
+      try {
+        // Fetch students for the specific course and batch
+        const response = await fetch(`http://localhost:8080/api/students?courseId=${courseId}&batchId=${batchId}`);
+        if (response.ok) {
+          const studentsData = await response.json();
 
-    setCourse(foundCourse);
+          // Transform API data to component format
+          const transformedStudents = studentsData.map((student: any) => ({
+            id: student.id,
+            studentName: student.name,
+            studentRollNo: student.rollNumber,
+            courseBatch: student.batch?.batchNo?.toString() || '',
+            studentSection: student.section,
+            status: 'Present' as const
+          }));
 
-    const courseStudents = getStudentsForCourse(foundCourse);
-    const sortedStudents = courseStudents
-      .sort((a, b) => a.studentRollNo.localeCompare(b.studentRollNo))
-      .map((student) => ({ ...student, status: "Present" as const }));
+          // Set course info from first student's data
+          if (studentsData.length > 0) {
+            const firstStudent = studentsData[0];
+            setCourse({
+              id: parseInt(courseId),
+              courseName: firstStudent.course.courseName,
+              courseCode: firstStudent.course.courseCode.toString(),
+              courseBatch: firstStudent.batch?.batchNo?.toString() || '',
+              courseType: 'Course' as const,
+              section: firstStudent.batch?.batchNo?.toString() || '',
+              year: parseInt(firstStudent.semester),
+              staffId: user.id
+            });
+          }
 
-    setStudents(sortedStudents);
+          setStudents(transformedStudents);
+        } else {
+          console.error('Failed to fetch students');
+          navigate('/staff');
+        }
+      } catch (error) {
+        console.error('Error fetching students:', error);
+        navigate('/staff');
+      }
+    };
+
+    fetchStudents();
   }, [courseId, navigate]);
 
   const handleToggle = (

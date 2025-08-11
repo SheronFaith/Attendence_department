@@ -113,6 +113,7 @@ export default function StaffAttendance() {
       }
 
       // Fallback to mock students when API is not available
+      console.log('🎭 [STUDENTS FALLBACK] Using demo/mock student data');
       const fallbackStudents = [
         {
           id: 1,

@@ -145,7 +145,7 @@ export default function StaffAttendance() {
       const courseNames = ['Mathematics', 'Physics', 'Chemistry'];
       const courseName = courseNames[parseInt(courseId) - 1] || 'Sample Course';
 
-      setCourse({
+      const fallbackCourse = {
         id: parseInt(courseId),
         courseName: courseName,
         courseCode: `${100 + parseInt(courseId)}`,
@@ -154,9 +154,14 @@ export default function StaffAttendance() {
         section: batchId || "1",
         year: 1,
         staffId: user.id
-      });
+      };
 
+      setCourse(fallbackCourse);
       setStudents(fallbackStudents);
+
+      console.log('📚 [FALLBACK COURSE] Demo course info:', fallbackCourse);
+      console.log('👥 [FALLBACK STUDENTS] Demo students loaded:', fallbackStudents);
+      console.log('💾 [UI UPDATE] Demo data set to state');
     };
 
     fetchStudents();

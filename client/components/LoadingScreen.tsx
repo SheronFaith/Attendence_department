@@ -85,26 +85,6 @@ export default function LoadingScreen({ userRole, userName }: LoadingScreenProps
           )}
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes fade-in-delay {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .animate-fade-in {
-          animation: fade-in 0.6s ease-out;
-        }
-        
-        .animate-fade-in-delay {
-          animation: fade-in-delay 0.6s ease-out 0.3s both;
-        }
-      `}</style>
     </div>
   );
 }

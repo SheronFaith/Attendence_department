@@ -111,6 +111,7 @@ export default function StaffDashboard() {
           </div>
 
           {/* Courses Grid/Table */}
+          {console.log("Filtered courses length:", filteredCourses.length, "Courses:", filteredCourses)}
           {filteredCourses.length === 0 ? (
             <Card>
               <CardContent className="flex items-center justify-center py-12">

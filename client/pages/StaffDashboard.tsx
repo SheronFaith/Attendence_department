@@ -45,7 +45,7 @@ export default function StaffDashboard() {
 
     const fetchCourses = async () => {
       try {
-        const apiUrl = "http://localhost:8080/courses/with-batches";
+        const apiUrl = "https://department-attendance-backend-production.up.railway.app/courses/with-batches";
         console.log("🚀 [API CALL] Fetching courses from:", apiUrl);
 
         const response = await fetch(apiUrl);

@@ -301,8 +301,13 @@ export default function StaffAttendance() {
 
       // Save to localStorage as fallback
       const existingRecords = JSON.parse(localStorage.getItem('attendance_records') || '[]');
+      console.log('📚 [EXISTING RECORDS] Current stored records count:', existingRecords.length);
+
       existingRecords.push(localAttendanceRecord);
       localStorage.setItem('attendance_records', JSON.stringify(existingRecords));
+
+      console.log('✅ [LOCAL STORAGE SUCCESS] Attendance saved locally');
+      console.log('📊 [TOTAL RECORDS] New total records count:', existingRecords.length);
 
       showToast("Attendance saved locally (API unavailable)");
       navigate("/staff");

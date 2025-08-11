@@ -281,6 +281,7 @@ export default function StaffAttendance() {
       }
 
       // Fallback to localStorage when API is not available
+      console.log('💾 [LOCAL STORAGE] Creating local attendance record as fallback');
       const localAttendanceRecord = {
         id: Date.now(),
         courseId: parseInt(courseId!),
@@ -296,6 +297,7 @@ export default function StaffAttendance() {
           status: student.status
         }))
       };
+      console.log('📋 [LOCAL RECORD] Local attendance data:', localAttendanceRecord);
 
       // Save to localStorage as fallback
       const existingRecords = JSON.parse(localStorage.getItem('attendance_records') || '[]');

@@ -166,42 +166,44 @@ export default function StaffAttendance() {
     setIsSubmitting(true);
 
     try {
-      const entries: AttendanceEntry[] = students.map((student) => ({
-        studentId: student.id,
-        studentRollNo: student.studentRollNo,
-        studentName: student.studentName,
-        status: student.status,
-      }));
-
-      const attendanceRecord = {
-        id: generateTimestampId(),
-        courseId: course!.id,
-        courseName: course!.courseName,
-        date,
-        periodFrom,
-        periodTo,
-        entries,
+      // Transform student status to API format
+      const statusMap = {
+        'Present': 'PRESENT',
+        'OD': 'OD',
+        'Leave': 'ABSENT'
       };
 
-      saveAttendanceRecord(attendanceRecord);
+      const attendanceList = students.map((student) => ({
+        studentId: student.id,
+        status: statusMap[student.status] || 'PRESENT'
+      }));
 
-      // TODO: Replace localStorage with API call
-      // try {
-      //   await axios.post('/api/staff/attendance', attendanceRecord, {
-      //     headers: { Authorization: `Bearer ${token}` }
-      //   });
-      //   showToast('Attendance saved successfully');
-      // } catch (error) {
-      //   showToast('Failed to save attendance. Please try again.', 5000);
-      //   return;
-      // }
+      const attendanceData = {
+        courseId: parseInt(courseId!),
+        batchId: parseInt(batchId!),
+        date: date,
+        time: `${periodFrom.toString().padStart(2, '0')}:30:00`, // Convert period to time format
+        attendanceList
+      };
 
-      showToast(
-        "Attendance saved locally. Replace with API call when backend is ready.",
-      );
-      navigate("/staff");
+      // Submit to API
+      const response = await fetch('http://localhost:8080/attendance/mark', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(attendanceData)
+      });
+
+      if (response.ok) {
+        showToast("Attendance saved successfully!");
+        navigate("/staff");
+      } else {
+        throw new Error('Failed to save attendance');
+      }
     } catch (error) {
-      showToast("Failed to save attendance. Please try again.", 5000);
+      console.error('Error saving attendance:', error);
+      showToast('Failed to save attendance. Please try again.', 5000);
     } finally {
       setIsSubmitting(false);
     }

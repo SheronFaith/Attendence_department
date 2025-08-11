@@ -197,10 +197,9 @@ export default function StaffDashboard() {
               the next screen.
             </p>
             {usingFallbackData && (
-              <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
-                <p className="text-sm text-yellow-800">
-                  ⚠️ Using demo data - API server not available. Connect to your
-                  backend API for live data.
+              <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                <p className="text-sm text-blue-800">
+                  🌐 <strong>Demo Mode:</strong> Showing simulated data. In production, this connects to your Railway API backend.
                 </p>
               </div>
             )}

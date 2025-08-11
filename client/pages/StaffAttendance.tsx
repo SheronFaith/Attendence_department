@@ -118,7 +118,7 @@ export default function StaffAttendance() {
             studentsData,
           );
           console.log(
-            "��� [STUDENTS COUNT] Number of students:",
+            "👥 [STUDENTS COUNT] Number of students:",
             studentsData.length,
           );
 
@@ -333,13 +333,61 @@ export default function StaffAttendance() {
           JSON.stringify(attendanceData, null, 2),
         );
 
-        const response = await fetch(apiUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+        // Try different fetch strategies for POST
+        const fetchOptions = [
+          // Strategy 1: Basic POST
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(attendanceData),
           },
-          body: JSON.stringify(attendanceData),
-        });
+          // Strategy 2: POST with Accept header
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+            },
+            body: JSON.stringify(attendanceData),
+          },
+          // Strategy 3: POST with CORS mode
+          {
+            method: "POST",
+            mode: 'cors' as RequestMode,
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+            },
+            body: JSON.stringify(attendanceData),
+          }
+        ];
+
+        let response;
+        let lastError;
+
+        for (let i = 0; i < fetchOptions.length; i++) {
+          try {
+            console.log(`🔄 [ATTENDANCE STRATEGY ${i + 1}] Trying submission strategy ${i + 1}`);
+            response = await fetch(apiUrl, fetchOptions[i]);
+            console.log(`📡 [ATTENDANCE STRATEGY ${i + 1}] Status:`, response.status, response.statusText);
+
+            if (response.ok) {
+              break; // Success, exit the loop
+            } else {
+              console.log(`⚠️ [ATTENDANCE STRATEGY ${i + 1}] Failed with status:`, response.status);
+            }
+          } catch (strategyError) {
+            console.log(`❌ [ATTENDANCE STRATEGY ${i + 1}] Error:`, strategyError);
+            lastError = strategyError;
+            continue; // Try next strategy
+          }
+        }
+
+        if (!response) {
+          throw lastError || new Error('All attendance submission strategies failed');
+        }
 
         console.log(
           "📡 [ATTENDANCE RESPONSE] Status:",

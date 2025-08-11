@@ -115,6 +115,8 @@ export default function StaffDashboard() {
 
       setCourses(fallbackCourses);
       setFilteredCourses(fallbackCourses);
+      console.log('📋 [FALLBACK DATA] Demo courses loaded:', fallbackCourses);
+      console.log('💾 [UI UPDATE] Demo data set to state');
     };
 
     fetchCourses();

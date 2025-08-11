@@ -14,7 +14,6 @@ interface ApiCourse {
   courseName: string;
   courseCode: number;
   roomNo: string;
-  staffName: string;
   batches: ApiBatch[] | null;
 }
 import { Button } from "@/components/ui/button";
@@ -45,7 +44,21 @@ export default function StaffDashboard() {
     }
 
     const fetchCourses = async () => {
-      // Always use fallback data in cloud environment where localhost isn't accessible
+      try {
+        // Try to fetch from your API first
+        const response = await fetch('http://localhost:8080/courses/with-batches');
+        if (response.ok) {
+          const coursesData: ApiCourse[] = await response.json();
+          setCourses(coursesData);
+          setFilteredCourses(coursesData);
+          setUsingFallbackData(false);
+          return;
+        }
+      } catch (error) {
+        console.warn('API not available, using fallback data:', error);
+      }
+
+      // Fallback to mock data when API is not available
       setUsingFallbackData(true);
       const fallbackCourses: ApiCourse[] = [
         {
@@ -53,7 +66,6 @@ export default function StaffDashboard() {
           courseName: "Mathematics",
           courseCode: 101,
           roomNo: "C101",
-          staffName: "Dr. Sheron Faith",
           batches: [
             {
               batchId: 1,
@@ -72,7 +84,6 @@ export default function StaffDashboard() {
           courseName: "Physics",
           courseCode: 102,
           roomNo: "C102",
-          staffName: "Dr. John Smith",
           batches: [
             {
               batchId: 3,
@@ -86,7 +97,6 @@ export default function StaffDashboard() {
           courseName: "Chemistry",
           courseCode: 103,
           roomNo: "C103",
-          staffName: "Dr. Sarah Wilson",
           batches: null
         }
       ];
@@ -96,7 +106,7 @@ export default function StaffDashboard() {
     };
 
     fetchCourses();
-    setStaffName(" "); // In real app, get from user data
+    setStaffName("Dr. Sheron Faith"); // In real app, get from user data
   }, [navigate]);
 
   useEffect(() => {

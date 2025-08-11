@@ -346,6 +346,13 @@ export default function StaffAttendance() {
           apiError,
         );
         console.log("🔄 [FALLBACK] Switching to local storage");
+
+        // Log more details about the error
+        if (apiError instanceof Error) {
+          console.log("❌ [API ERROR DETAILS] Name:", apiError.name);
+          console.log("❌ [API ERROR DETAILS] Message:", apiError.message);
+          console.log("❌ [API ERROR DETAILS] Stack:", apiError.stack);
+        }
       }
 
       // Fallback to localStorage when API is not available

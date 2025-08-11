@@ -70,10 +70,10 @@ export default function Login() {
         let actualUserName = "";
         if (user.role === "staff") {
           const staffData = mockStaff.find(s => s.id === user.id);
-          actualUserName = staffData?.name || "Staff User";
+          actualUserName = staffData?.staffName || "Staff User";
         } else {
           const adminData = mockAdmins.find(a => a.id === user.id);
-          actualUserName = adminData?.name || "Admin User";
+          actualUserName = adminData?.adminName || "Admin User";
         }
 
         // Show loading screen

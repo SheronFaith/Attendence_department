@@ -48,21 +48,57 @@ export default function StaffDashboard() {
         const apiUrl = "https://department-attendance-backend-production.up.railway.app/courses/with-batches";
         console.log("🚀 [API CALL] Fetching courses from:", apiUrl);
 
-        const response = await fetch(apiUrl, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
+        // Try different fetch strategies
+        const fetchOptions = [
+          // Strategy 1: Basic fetch with minimal headers
+          {
+            method: 'GET',
           },
-        });
+          // Strategy 2: Fetch with standard headers
+          {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+            },
+          },
+          // Strategy 3: Fetch with CORS mode
+          {
+            method: 'GET',
+            mode: 'cors' as RequestMode,
+            headers: {
+              'Accept': 'application/json',
+            },
+          }
+        ];
 
-        console.log(
-          "📡 [API RESPONSE] Status:",
-          response.status,
-          response.statusText,
-        );
-        console.log("📡 [API RESPONSE] Headers:", Object.fromEntries(response.headers.entries()));
+        let response;
+        let lastError;
 
-        if (response.ok) {
+        for (let i = 0; i < fetchOptions.length; i++) {
+          try {
+            console.log(`🔄 [STRATEGY ${i + 1}] Trying fetch strategy ${i + 1}`);
+            response = await fetch(apiUrl, fetchOptions[i]);
+            console.log(`📡 [STRATEGY ${i + 1}] Status:`, response.status, response.statusText);
+
+            if (response.ok) {
+              break; // Success, exit the loop
+            } else {
+              console.log(`⚠️ [STRATEGY ${i + 1}] Failed with status:`, response.status);
+              if (i === fetchOptions.length - 1) {
+                // Last strategy failed, log error
+                const errorText = await response.text();
+                console.warn("⚠️ [ALL STRATEGIES FAILED] Final error:", errorText);
+              }
+            }
+          } catch (strategyError) {
+            console.log(`❌ [STRATEGY ${i + 1}] Error:`, strategyError);
+            lastError = strategyError;
+            continue; // Try next strategy
+          }
+        }
+
+        if (response && response.ok) {
+          console.log("📡 [API RESPONSE] Headers:", Object.fromEntries(response.headers.entries()));
           const coursesData: ApiCourse[] = await response.json();
           console.log("✅ [API SUCCESS] Courses data received:", coursesData);
           console.log("📊 [API DATA] Number of courses:", coursesData.length);
@@ -70,22 +106,13 @@ export default function StaffDashboard() {
           setCourses(coursesData);
           setFilteredCourses(coursesData);
           setUsingFallbackData(false);
-          console.log(
-            "💾 [UI UPDATE] Courses data set to state, using live API data",
-          );
+          console.log("💾 [UI UPDATE] Courses data set to state, using live API data");
           return;
         } else {
-          const errorText = await response.text();
-          console.warn(
-            "⚠️ [API ERROR] Response not OK:",
-            response.status,
-            response.statusText,
-            "Body:",
-            errorText
-          );
+          throw lastError || new Error('All fetch strategies failed');
         }
       } catch (error) {
-        console.error("❌ [API FETCH ERROR] API not available:", error);
+        console.error("❌ [API FETCH ERROR] All strategies failed:", error);
         console.log("🔄 [FALLBACK] Switching to demo data");
 
         // Log more details about the error

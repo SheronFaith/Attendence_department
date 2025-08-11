@@ -14,6 +14,7 @@ interface ApiCourse {
   courseName: string;
   courseCode: number;
   roomNo: string;
+  staffName: string;
   batches: ApiBatch[] | null;
 }
 import { Button } from "@/components/ui/button";
